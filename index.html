@@ -918,12 +918,18 @@
         padding: 140px 20px 60px;
         isolation: isolate;
         background-color: #FDFAF5 !important;
+        min-height: 100vh;
+        overflow: hidden;
+        position: relative;
       }
 
       .hero-headline,
-      .hero-sub,
-      .hero-cta {
+      .hero-sub {
         z-index: 1;
+      }
+
+      .hero-cta {
+        z-index: 10;
       }
 
       .hero .bread-float {
@@ -939,31 +945,34 @@
         display: block !important;
         position: absolute;
         pointer-events: none;
-        object-fit: contain;
         z-index: 0;
         mix-blend-mode: multiply;
         width: 160px;
-        max-width: 180px;
+        height: 160px;
+        max-width: 160px;
+        max-height: 160px;
+        object-fit: cover;
+        border-radius: 12px;
       }
 
       .hero .bread-mob-tl {
-        top: 60px;
-        left: -20px;
+        top: 10px;
+        left: -10px;
       }
 
       .hero .bread-mob-tr {
-        top: 40px;
-        right: -20px;
+        top: 10px;
+        right: -10px;
       }
 
       .hero .bread-mob-bl {
-        bottom: 60px;
-        left: -20px;
+        bottom: 120px;
+        left: -10px;
       }
 
       .hero .bread-mob-br {
-        bottom: 40px;
-        right: -20px;
+        bottom: 120px;
+        right: -10px;
       }
 
       .hero-headline {
@@ -1149,7 +1158,7 @@
     <img class="bread-float bread-strawberry" src="images/strawberry_cheesecake.png" alt="Strawberry cheesecake bread" />
     <img class="bread-float bread-matcha" src="images/matcha.png" alt="Matcha swirl bread" />
     <img class="bread-float bread-tiramisu" src="images/tiramisu.png" alt="Tiramisu swirl bread" />
-    <img class="bread-float bread-mobile-only bread-mob-tl" src="images/regular_artesian.jpg" alt="" />
+    <img class="bread-float bread-mobile-only bread-mob-tl" src="images/strawberry_cheescake.png" alt="" />
     <img class="bread-float bread-mobile-only bread-mob-tr" src="images/creme_brule.jpg" alt="" />
     <img class="bread-float bread-mobile-only bread-mob-bl" src="images/cinnamon.jpg" alt="" />
     <img class="bread-float bread-mobile-only bread-mob-br" src="images/nutella.jpg" alt="" />
