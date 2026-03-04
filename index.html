@@ -330,6 +330,8 @@
       cursor: grab;
       -webkit-user-select: none;
       user-select: none;
+      touch-action: pan-y;
+      overscroll-behavior-x: contain;
     }
 
     .carousel-viewport.is-dragging {
@@ -340,6 +342,7 @@
       display: flex;
       gap: 24px;
       will-change: transform;
+      overscroll-behavior-x: contain;
     }
 
     .flavor-card {
@@ -876,6 +879,11 @@
     /* ——— RESPONSIVE ——— */
 
     @media (max-width: 768px) {
+      html,
+      body {
+        background-color: #111111;
+      }
+
       .navbar {
         padding: 14px 20px;
       }
@@ -1005,29 +1013,33 @@
 
       .site-footer {
         padding: 60px 24px 0;
+        background: #111111;
+        overflow: hidden;
       }
 
       .footer-top {
+        display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        gap: 8px;
-        padding: 0 24px;
+        gap: 6px;
+        padding: 0 24px 16px;
         text-align: center;
       }
 
       .footer-top span,
       .footer-top a {
-        font-size: 11px;
-        color: #444;
+        font-size: 10px;
+        color: #555;
       }
 
       .footer-wordmark-wrap {
-        font-size: clamp(48px, 18vw, 120px);
+        font-size: clamp(40px, 16vw, 100px);
+        height: 0.72em;
       }
 
       .footer-wordmark {
-        font-size: clamp(48px, 18vw, 120px);
+        font-size: clamp(40px, 16vw, 100px);
       }
 
       .about-section {
@@ -1383,11 +1395,14 @@
       var paused = false;
       var dragging = false;
       var startX = 0;
+      var startY = 0;
       var dragOffset = 0;
       var velocity = 0;
       var lastX = 0;
       var lastTime = 0;
       var momentumId = null;
+      var touchIntent = null;
+      var resumeTimeout = null;
 
       cards.forEach(function (card) {
         track.appendChild(card.cloneNode(true));
@@ -1456,12 +1471,29 @@
       window.addEventListener('mouseup', onDragEnd);
 
       viewport.addEventListener('touchstart', function (e) {
-        onDragStart(e.touches[0].clientX);
+        startX = e.touches[0].clientX;
+        startY = e.touches[0].clientY;
+        touchIntent = null;
+        paused = true;
+        if (resumeTimeout) clearTimeout(resumeTimeout);
       }, { passive: true });
       viewport.addEventListener('touchmove', function (e) {
-        onDragMove(e.touches[0].clientX);
-      }, { passive: true });
-      viewport.addEventListener('touchend', onDragEnd);
+        var x = e.touches[0].clientX;
+        var y = e.touches[0].clientY;
+        var deltaX = x - startX;
+        var deltaY = y - startY;
+        if (touchIntent === null) {
+          touchIntent = Math.abs(deltaX) > Math.abs(deltaY) ? 'h' : 'v';
+        }
+        if (touchIntent === 'v') return;
+        e.preventDefault();
+        if (!dragging) onDragStart(startX);
+        onDragMove(x);
+      }, { passive: false });
+      viewport.addEventListener('touchend', function (e) {
+        if (dragging) onDragEnd();
+        resumeTimeout = setTimeout(function () { paused = false; }, 1000);
+      });
     })();
   </script>
 
