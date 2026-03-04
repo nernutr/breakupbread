@@ -243,10 +243,6 @@
       animation: driftTiramisu 1s ease 1.4s both;
     }
 
-    .bread-mobile-only {
-      display: none;
-    }
-
     /* ——— ANIMATIONS ——— */
 
     @keyframes bannerIn {
@@ -342,11 +338,22 @@
       cursor: grabbing;
     }
 
+    @keyframes scroll {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
     .carousel-track {
       display: flex;
       gap: 24px;
       will-change: transform;
+      backface-visibility: hidden;
       overscroll-behavior-x: contain;
+      animation: scroll 30s linear infinite;
+    }
+
+    .carousel-track.paused {
+      animation-play-state: paused;
     }
 
     .flavor-card {
@@ -916,63 +923,39 @@
 
       .hero {
         padding: 140px 20px 60px;
-        isolation: isolate;
-        background-color: #FDFAF5 !important;
         min-height: 100vh;
+        background-color: #FDFAF5;
         overflow: hidden;
-        position: relative;
       }
 
-      .hero-headline,
-      .hero-sub {
-        z-index: 1;
+      .bread-artesian {
+        width: 248px;
+        top: 18px;
+        left: -18px;
       }
 
-      .hero-cta {
-        z-index: 10;
+      .bread-creme {
+        width: 189px;
+        top: -81px;
+        left: 171px;
       }
 
-      .hero .bread-float {
-        mix-blend-mode: multiply;
-        z-index: 0;
+      .bread-strawberry {
+        width: 252px;
+        bottom: -18px;
+        left: 18px;
       }
 
-      .hero .bread-float:not(.bread-mobile-only) {
-        display: none;
+      .bread-matcha {
+        width: 234px;
+        top: 9px;
+        right: -14px;
       }
 
-      .hero .bread-mobile-only {
-        display: block !important;
-        position: absolute;
-        pointer-events: none;
-        z-index: 0;
-        mix-blend-mode: multiply;
-        width: 160px;
-        height: 160px;
-        max-width: 160px;
-        max-height: 160px;
-        object-fit: cover;
-        border-radius: 12px;
-      }
-
-      .hero .bread-mob-tl {
-        top: 10px;
-        left: -10px;
-      }
-
-      .hero .bread-mob-tr {
-        top: 10px;
-        right: -10px;
-      }
-
-      .hero .bread-mob-bl {
-        bottom: 120px;
-        left: -10px;
-      }
-
-      .hero .bread-mob-br {
-        bottom: 120px;
-        right: -10px;
+      .bread-tiramisu {
+        width: 239px;
+        bottom: -14px;
+        right: 9px;
       }
 
       .hero-headline {
@@ -1118,14 +1101,6 @@
         font-size: 15px;
         margin-top: 18px;
       }
-
-      .bread-artesian {
-        width: 140px;
-      }
-
-      .bread-tiramisu {
-        width: 140px;
-      }
     }
   </style>
 </head>
@@ -1152,16 +1127,12 @@
   <!-- Hero -->
   <section class="hero">
 
-    <!-- Floating bread slices (desktop: PNGs; mobile: parchment JPGs) -->
+    <!-- Floating bread slices -->
     <img class="bread-float bread-artesian" src="images/regular_artesian.png" alt="Artisan sourdough bread" />
     <img class="bread-float bread-creme" src="images/creme_brulee.png" alt="Creme brulee swirl bread" />
     <img class="bread-float bread-strawberry" src="images/strawberry_cheesecake.png" alt="Strawberry cheesecake bread" />
     <img class="bread-float bread-matcha" src="images/matcha.png" alt="Matcha swirl bread" />
     <img class="bread-float bread-tiramisu" src="images/tiramisu.png" alt="Tiramisu swirl bread" />
-    <img class="bread-float bread-mobile-only bread-mob-tl" src="images/strawberry_cheescake.png" alt="" />
-    <img class="bread-float bread-mobile-only bread-mob-tr" src="images/creme_brule.jpg" alt="" />
-    <img class="bread-float bread-mobile-only bread-mob-bl" src="images/cinnamon.jpg" alt="" />
-    <img class="bread-float bread-mobile-only bread-mob-br" src="images/nutella.jpg" alt="" />
 
     <!-- Hero content -->
     <h1 class="hero-headline">bread for<br>the hard days.</h1>
@@ -1420,52 +1391,66 @@
       var track = document.getElementById('carouselTrack');
       var cards = Array.from(track.children);
       var gap = 24;
-      var offset = 0;
-      var autoSpeed = window.matchMedia('(max-width: 768px)').matches ? 1 : 0.5;
-      var rafId = null;
-      var paused = false;
+      var setWidth = cards.length * (cards[0].offsetWidth + gap);
       var dragging = false;
       var startX = 0;
-      var startY = 0;
       var dragOffset = 0;
       var velocity = 0;
       var lastX = 0;
       var lastTime = 0;
       var momentumId = null;
       var touchIntent = null;
-      var resumeTimeout = null;
+      var resumeDelay = 500;
 
       cards.forEach(function (card) {
         track.appendChild(card.cloneNode(true));
       });
 
-      var setWidth = cards.length * (cards[0].offsetWidth + gap);
-
-      function tick() {
-        if (!paused && !dragging) {
-          offset -= autoSpeed;
-          if (Math.abs(offset) >= setWidth) offset += setWidth;
-          track.style.transform = 'translateX(' + offset + 'px)';
-        }
-        rafId = requestAnimationFrame(tick);
+      function getTrackTranslateX() {
+        var m = getComputedStyle(track).transform;
+        if (!m || m === 'none') return 0;
+        var parts = m.split(',');
+        return parts.length >= 6 ? parseFloat(parts[4]) : 0;
       }
 
-      rafId = requestAnimationFrame(tick);
+      function pauseScroll() {
+        track.classList.add('paused');
+      }
 
-      viewport.addEventListener('mouseenter', function () { paused = true; });
-      viewport.addEventListener('mouseleave', function () { paused = false; });
+      function resumeScroll() {
+        track.classList.remove('paused');
+      }
+
+      var leaveTimeout = null;
+      viewport.addEventListener('mouseenter', pauseScroll);
+      viewport.addEventListener('mouseleave', function () {
+        if (leaveTimeout) clearTimeout(leaveTimeout);
+        leaveTimeout = setTimeout(resumeScroll, resumeDelay);
+      });
+
+      viewport.addEventListener('touchstart', function (e) {
+        startX = e.touches[0].clientX;
+        touchIntent = null;
+        pauseScroll();
+        if (leaveTimeout) clearTimeout(leaveTimeout);
+      }, { passive: true });
+      viewport.addEventListener('touchend', function () {
+        leaveTimeout = setTimeout(resumeScroll, resumeDelay);
+      }, { passive: true });
 
       function onDragStart(x) {
         dragging = true;
         viewport.classList.add('is-dragging');
+        pauseScroll();
         startX = x;
-        dragOffset = offset;
+        dragOffset = getTrackTranslateX();
         velocity = 0;
         lastX = x;
         lastTime = performance.now();
         if (momentumId) cancelAnimationFrame(momentumId);
       }
 
+      var offset = 0;
       function onDragMove(x) {
         if (!dragging) return;
         var now = performance.now();
@@ -1481,11 +1466,18 @@
       function onDragEnd() {
         if (!dragging) return;
         dragging = false;
+        if (leaveTimeout) clearTimeout(leaveTimeout);
+        leaveTimeout = null;
         viewport.classList.remove('is-dragging');
+        track.style.transform = '';
 
         function momentum() {
           velocity *= 0.95;
-          if (Math.abs(velocity) < 0.01) return;
+          if (Math.abs(velocity) < 0.01) {
+            track.style.transform = '';
+            resumeScroll();
+            return;
+          }
           offset += velocity * 16;
           if (Math.abs(offset) >= setWidth) offset += (offset < 0 ? setWidth : -setWidth);
           track.style.transform = 'translateX(' + offset + 'px)';
@@ -1501,13 +1493,6 @@
       window.addEventListener('mousemove', function (e) { onDragMove(e.clientX); });
       window.addEventListener('mouseup', onDragEnd);
 
-      viewport.addEventListener('touchstart', function (e) {
-        startX = e.touches[0].clientX;
-        startY = e.touches[0].clientY;
-        touchIntent = null;
-        paused = true;
-        if (resumeTimeout) clearTimeout(resumeTimeout);
-      }, { passive: true });
       viewport.addEventListener('touchmove', function (e) {
         var x = e.touches[0].clientX;
         var y = e.touches[0].clientY;
@@ -1523,7 +1508,7 @@
       }, { passive: false });
       viewport.addEventListener('touchend', function (e) {
         if (dragging) onDragEnd();
-        resumeTimeout = setTimeout(function () { paused = false; }, 1000);
+        else leaveTimeout = setTimeout(resumeScroll, resumeDelay);
       });
     })();
   </script>
