@@ -880,6 +880,10 @@
         padding: 14px 20px;
       }
 
+      .nav-left a:first-child {
+        display: none;
+      }
+
       .nav-left {
         gap: 18px;
       }
@@ -890,16 +894,20 @@
       }
 
       .nav-logo img {
-        height: 50px;
+        height: 28px;
       }
 
       .nav-right .btn-preorder {
         font-size: 12px;
-        padding: 10px 20px;
+        padding: 8px 14px;
       }
 
       .hero {
         padding: 140px 20px 60px;
+      }
+
+      .hero-headline {
+        font-size: clamp(48px, 12vw, 72px);
       }
 
       .hero-sub {
@@ -912,10 +920,38 @@
         padding: 16px 32px;
       }
 
-      .bread-strawberry,
-      .bread-matcha,
+      .bread-artesian {
+        top: 60px;
+        left: -20px;
+        width: 160px;
+        max-width: 180px;
+      }
+
       .bread-creme {
         display: none;
+      }
+
+      .bread-strawberry {
+        display: block;
+        bottom: 60px;
+        left: -20px;
+        width: 160px;
+        max-width: 180px;
+      }
+
+      .bread-matcha {
+        display: block;
+        top: 40px;
+        right: -20px;
+        width: 160px;
+        max-width: 180px;
+      }
+
+      .bread-tiramisu {
+        bottom: 40px;
+        right: -20px;
+        width: 160px;
+        max-width: 180px;
       }
 
       .drop-section {
@@ -923,7 +959,11 @@
       }
 
       .box-section {
-        padding: 60px 20px 80px;
+        padding: 60px 20px 40px;
+      }
+
+      .urgency-bar {
+        margin-top: 32px;
       }
 
       .box-grid {
@@ -946,16 +986,48 @@
         display: none;
       }
 
-      .bread-artesian {
-        width: 180px;
-        top: 80px;
-        left: -20px;
+      .waitlist-section {
+        padding: 60px 24px 160px;
       }
 
-      .bread-tiramisu {
-        width: 180px;
-        bottom: -20px;
-        right: 20px;
+      .waitlist-form {
+        flex-direction: column;
+        width: 100%;
+      }
+
+      .waitlist-input {
+        width: 100%;
+      }
+
+      .waitlist-btn {
+        width: 100%;
+      }
+
+      .site-footer {
+        padding: 60px 24px 0;
+      }
+
+      .footer-top {
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 0 24px;
+        text-align: center;
+      }
+
+      .footer-top span,
+      .footer-top a {
+        font-size: 11px;
+        color: #444;
+      }
+
+      .footer-wordmark-wrap {
+        font-size: clamp(48px, 18vw, 120px);
+      }
+
+      .footer-wordmark {
+        font-size: clamp(48px, 18vw, 120px);
       }
 
       .about-section {
@@ -1306,7 +1378,7 @@
       var cards = Array.from(track.children);
       var gap = 24;
       var offset = 0;
-      var autoSpeed = 0.5;
+      var autoSpeed = window.matchMedia('(max-width: 768px)').matches ? 1 : 0.5;
       var rafId = null;
       var paused = false;
       var dragging = false;
