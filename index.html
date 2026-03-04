@@ -334,10 +334,6 @@
       overscroll-behavior-x: contain;
     }
 
-    .carousel-viewport.is-dragging {
-      cursor: grabbing;
-    }
-
     @keyframes scroll {
       0% { transform: translateX(0); }
       100% { transform: translateX(-50%); }
@@ -349,11 +345,7 @@
       will-change: transform;
       backface-visibility: hidden;
       overscroll-behavior-x: contain;
-      animation: scroll 30s linear infinite;
-    }
-
-    .carousel-track.paused {
-      animation-play-state: paused;
+      animation: scroll 15s linear infinite;
     }
 
     .flavor-card {
@@ -928,34 +920,40 @@
         overflow: hidden;
       }
 
+      .hero-headline,
+      .hero-sub,
+      .hero-cta {
+        position: relative;
+        z-index: 10;
+      }
+
+      .bread-float {
+        width: 130px;
+        height: auto;
+      }
+
       .bread-artesian {
-        width: 248px;
-        top: 18px;
-        left: -18px;
+        top: 70px;
+        left: -20px;
       }
 
       .bread-creme {
-        width: 189px;
-        top: -81px;
-        left: 171px;
+        display: none;
       }
 
       .bread-strawberry {
-        width: 252px;
-        bottom: -18px;
-        left: 18px;
+        bottom: 180px;
+        left: -20px;
       }
 
       .bread-matcha {
-        width: 234px;
-        top: 9px;
-        right: -14px;
+        top: 70px;
+        right: -20px;
       }
 
       .bread-tiramisu {
-        width: 239px;
-        bottom: -14px;
-        right: 9px;
+        bottom: 180px;
+        right: -20px;
       }
 
       .hero-headline {
@@ -1128,11 +1126,11 @@
   <section class="hero">
 
     <!-- Floating bread slices -->
-    <img class="bread-float bread-artesian" src="images/regular_artesian.png" alt="Artisan sourdough bread" />
-    <img class="bread-float bread-creme" src="images/creme_brulee.png" alt="Creme brulee swirl bread" />
-    <img class="bread-float bread-strawberry" src="images/strawberry_cheesecake.png" alt="Strawberry cheesecake bread" />
-    <img class="bread-float bread-matcha" src="images/matcha.png" alt="Matcha swirl bread" />
-    <img class="bread-float bread-tiramisu" src="images/tiramisu.png" alt="Tiramisu swirl bread" />
+    <img class="bread-float bread-artesian" src="images/regular_artesian.png" alt="the closure" />
+    <img class="bread-float bread-creme" src="images/creme_brulee.png" alt="the almost" />
+    <img class="bread-float bread-strawberry" src="images/strawberry_cheesecake.png" alt="the rebound" />
+    <img class="bread-float bread-matcha" src="images/matcha.png" alt="the moving on" />
+    <img class="bread-float bread-tiramisu" src="images/tiramisu.png" alt="the 3am" />
 
     <!-- Hero content -->
     <h1 class="hero-headline">bread for<br>the hard days.</h1>
@@ -1153,10 +1151,10 @@
       <div class="carousel-track" id="carouselTrack">
         <div class="flavor-card">
           <div class="flavor-img-wrap">
-            <img src="images/cinnamon.jpg" alt="Cinnamon Swirl" />
+            <img src="images/cinnamon.jpg" alt="the situationship" />
           </div>
           <div class="flavor-body">
-            <div class="flavor-name">cinnamon swirl</div>
+            <div class="flavor-name">the situationship</div>
             <div class="flavor-desc">for when you need something warm and familiar</div>
             <div class="flavor-avail">coming friday drops</div>
           </div>
@@ -1164,10 +1162,10 @@
 
         <div class="flavor-card">
           <div class="flavor-img-wrap">
-            <img src="images/nutella.jpg" alt="Nutella" />
+            <img src="images/nutella.jpg" alt="the apology" />
           </div>
           <div class="flavor-body">
-            <div class="flavor-name">nutella</div>
+            <div class="flavor-name">the apology</div>
             <div class="flavor-desc">for when you need something dark and comforting</div>
             <div class="flavor-avail">coming friday drops</div>
           </div>
@@ -1175,10 +1173,10 @@
 
         <div class="flavor-card">
           <div class="flavor-img-wrap">
-            <img src="images/creme_brule.jpg" alt="Crème Brûlée" />
+            <img src="images/creme_brule.jpg" alt="the almost" />
           </div>
           <div class="flavor-body">
-            <div class="flavor-name">crème brûlée</div>
+            <div class="flavor-name">the almost</div>
             <div class="flavor-desc">for when you deserve something beautiful</div>
             <div class="flavor-avail">coming friday drops</div>
           </div>
@@ -1186,10 +1184,10 @@
 
         <div class="flavor-card">
           <div class="flavor-img-wrap flavor-img-wrap--crop-top">
-            <img src="images/classic_sourdough.jpg" alt="Classic Sourdough" />
+            <img src="images/classic_sourdough.jpg" alt="the closure" />
           </div>
           <div class="flavor-body">
-            <div class="flavor-name">classic sourdough</div>
+            <div class="flavor-name">the closure</div>
             <div class="flavor-desc">for when simple is exactly enough</div>
             <div class="flavor-avail">coming friday drops</div>
           </div>
@@ -1208,10 +1206,10 @@
 
         <div class="flavor-card">
           <div class="flavor-img-wrap">
-            <img src="images/matcha.jpg" alt="Matcha" />
+            <img src="images/matcha.jpg" alt="the moving on" />
           </div>
           <div class="flavor-body">
-            <div class="flavor-name">matcha</div>
+            <div class="flavor-name">the moving on</div>
             <div class="flavor-desc">for the morning after</div>
             <div class="flavor-avail">coming friday drops</div>
           </div>
@@ -1219,10 +1217,10 @@
 
         <div class="flavor-card">
           <div class="flavor-img-wrap">
-            <img src="images/tiramisu.jpg" alt="Tiramisu" />
+            <img src="images/tiramisu.jpg" alt="the 3am" />
           </div>
           <div class="flavor-body">
-            <div class="flavor-name">tiramisu</div>
+            <div class="flavor-name">the 3am</div>
             <div class="flavor-desc">for when coffee isn't enough</div>
             <div class="flavor-avail">coming friday drops</div>
           </div>
@@ -1387,128 +1385,56 @@
     })();
 
     (function () {
-      var viewport = document.getElementById('carousel');
-      var track = document.getElementById('carouselTrack');
-      var cards = Array.from(track.children);
-      var gap = 24;
-      var setWidth = cards.length * (cards[0].offsetWidth + gap);
-      var dragging = false;
-      var startX = 0;
-      var dragOffset = 0;
-      var velocity = 0;
-      var lastX = 0;
-      var lastTime = 0;
-      var momentumId = null;
-      var touchIntent = null;
-      var resumeDelay = 500;
+      var carousel = document.getElementById('carousel');
+      if (!carousel) return;
 
-      cards.forEach(function (card) {
-        track.appendChild(card.cloneNode(true));
-      });
-
-      function getTrackTranslateX() {
-        var m = getComputedStyle(track).transform;
-        if (!m || m === 'none') return 0;
-        var parts = m.split(',');
-        return parts.length >= 6 ? parseFloat(parts[4]) : 0;
+      var isMobile = window.matchMedia('(max-width: 768px)').matches;
+      if (!isMobile) {
+        return;
       }
 
-      function pauseScroll() {
-        track.classList.add('paused');
+      var autoScrollId = null;
+
+      function pauseAutoScroll() {
+        if (autoScrollId) {
+          clearInterval(autoScrollId);
+          autoScrollId = null;
+        }
       }
 
-      function resumeScroll() {
-        track.classList.remove('paused');
-      }
-
-      var leaveTimeout = null;
-      viewport.addEventListener('mouseenter', pauseScroll);
-      viewport.addEventListener('mouseleave', function () {
-        if (leaveTimeout) clearTimeout(leaveTimeout);
-        leaveTimeout = setTimeout(resumeScroll, resumeDelay);
-      });
-
-      viewport.addEventListener('touchstart', function (e) {
-        startX = e.touches[0].clientX;
-        touchIntent = null;
-        pauseScroll();
-        if (leaveTimeout) clearTimeout(leaveTimeout);
-      }, { passive: true });
-      viewport.addEventListener('touchend', function () {
-        leaveTimeout = setTimeout(resumeScroll, resumeDelay);
-      }, { passive: true });
-
-      function onDragStart(x) {
-        dragging = true;
-        viewport.classList.add('is-dragging');
-        pauseScroll();
-        startX = x;
-        dragOffset = getTrackTranslateX();
-        velocity = 0;
-        lastX = x;
-        lastTime = performance.now();
-        if (momentumId) cancelAnimationFrame(momentumId);
-      }
-
-      var offset = 0;
-      function onDragMove(x) {
-        if (!dragging) return;
-        var now = performance.now();
-        var dt = now - lastTime;
-        if (dt > 0) velocity = (x - lastX) / dt;
-        lastX = x;
-        lastTime = now;
-        offset = dragOffset + (x - startX);
-        if (Math.abs(offset) >= setWidth) offset += (offset < 0 ? setWidth : -setWidth);
-        track.style.transform = 'translateX(' + offset + 'px)';
-      }
-
-      function onDragEnd() {
-        if (!dragging) return;
-        dragging = false;
-        if (leaveTimeout) clearTimeout(leaveTimeout);
-        leaveTimeout = null;
-        viewport.classList.remove('is-dragging');
-        track.style.transform = '';
-
-        function momentum() {
-          velocity *= 0.95;
-          if (Math.abs(velocity) < 0.01) {
-            track.style.transform = '';
-            resumeScroll();
-            return;
+      function resumeAutoScroll() {
+        if (autoScrollId) return;
+        autoScrollId = setInterval(function () {
+          carousel.scrollLeft += 3;
+          if (carousel.scrollLeft + carousel.clientWidth >= carousel.scrollWidth) {
+            carousel.scrollLeft = 0;
           }
-          offset += velocity * 16;
-          if (Math.abs(offset) >= setWidth) offset += (offset < 0 ? setWidth : -setWidth);
-          track.style.transform = 'translateX(' + offset + 'px)';
-          momentumId = requestAnimationFrame(momentum);
-        }
-        momentum();
+        }, 16);
       }
 
-      viewport.addEventListener('mousedown', function (e) {
-        e.preventDefault();
-        onDragStart(e.clientX);
-      });
-      window.addEventListener('mousemove', function (e) { onDragMove(e.clientX); });
-      window.addEventListener('mouseup', onDragEnd);
+      resumeAutoScroll();
 
-      viewport.addEventListener('touchmove', function (e) {
-        var x = e.touches[0].clientX;
-        var y = e.touches[0].clientY;
-        var deltaX = x - startX;
-        var deltaY = y - startY;
-        if (touchIntent === null) {
-          touchIntent = Math.abs(deltaX) > Math.abs(deltaY) ? 'h' : 'v';
-        }
-        if (touchIntent === 'v') return;
-        e.preventDefault();
-        if (!dragging) onDragStart(startX);
-        onDragMove(x);
-      }, { passive: false });
-      viewport.addEventListener('touchend', function (e) {
-        if (dragging) onDragEnd();
-        else leaveTimeout = setTimeout(resumeScroll, resumeDelay);
+      let startX = 0;
+      let scrollLeft = 0;
+      let isDown = false;
+
+      carousel.addEventListener('touchstart', function (e) {
+        isDown = true;
+        startX = e.touches[0].pageX - carousel.offsetLeft;
+        scrollLeft = carousel.scrollLeft;
+        pauseAutoScroll();
+      }, { passive: true });
+
+      carousel.addEventListener('touchmove', function (e) {
+        if (!isDown) return;
+        const x = e.touches[0].pageX - carousel.offsetLeft;
+        const walk = (x - startX) * 2;
+        carousel.scrollLeft = scrollLeft - walk;
+      }, { passive: true });
+
+      carousel.addEventListener('touchend', function () {
+        isDown = false;
+        setTimeout(resumeAutoScroll, 1000);
       });
     })();
   </script>
