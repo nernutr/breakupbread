@@ -293,21 +293,6 @@
       width: 100%;
     }
 
-    .drop-label {
-      font-family: 'DM Sans', sans-serif;
-      font-size: 11px;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: #888;
-    }
-
-    .drop-date {
-      font-family: 'DM Sans', sans-serif;
-      font-size: 11px;
-      color: #aaa;
-      margin-top: 4px;
-    }
-
     .drop-headline {
       font-family: 'Fraunces', serif;
       font-size: clamp(40px, 5vw, 64px);
@@ -364,16 +349,11 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      transition: transform 0.4s ease;
       pointer-events: none;
     }
 
     .flavor-img-wrap--crop-top img {
       object-position: center 30%;
-    }
-
-    .flavor-card:hover .flavor-img-wrap img {
-      transform: scale(1.03);
     }
 
     .flavor-body {
@@ -1114,7 +1094,7 @@
   <nav class="navbar">
     <div class="nav-left">
       <a href="#drops">Drops</a>
-      <a href="#about">About</a>
+      <a href="about.html">About</a>
     </div>
     <a href="#" class="nav-logo"><img src="images/logo.png" alt="Breakup Bread" /></a>
     <div class="nav-right">
@@ -1147,82 +1127,82 @@
 
     <div class="carousel-viewport">
       <div class="carousel-track">
-        <div class="flavor-card">
+        <article class="flavor-card">
           <div class="flavor-img-wrap">
             <img src="images/cinnamon.jpg" alt="cinnamon swirl" />
           </div>
           <div class="flavor-body">
-            <div class="flavor-name">cinnamon swirl</div>
-            <div class="flavor-desc">warm, familiar, and a little too good</div>
+            <h3 class="flavor-name">cinnamon swirl</h3>
+            <p class="flavor-desc">warm, familiar, and a little too good</p>
             <div class="flavor-avail">coming soon</div>
           </div>
-        </div>
+        </article>
 
-        <div class="flavor-card">
+        <article class="flavor-card">
           <div class="flavor-img-wrap">
             <img src="images/nutella.jpg" alt="nutella" />
           </div>
           <div class="flavor-body">
-            <div class="flavor-name">nutella</div>
-            <div class="flavor-desc">dark, indulgent, no explanation needed</div>
+            <h3 class="flavor-name">nutella</h3>
+            <p class="flavor-desc">dark, indulgent, no explanation needed</p>
             <div class="flavor-avail">coming soon</div>
           </div>
-        </div>
+        </article>
 
-        <div class="flavor-card">
+        <article class="flavor-card">
           <div class="flavor-img-wrap">
             <img src="images/creme_brule.jpg" alt="crème brûlée" />
           </div>
           <div class="flavor-body">
-            <div class="flavor-name">crème brûlée</div>
-            <div class="flavor-desc">rich custard swirled into every bite</div>
+            <h3 class="flavor-name">crème brûlée</h3>
+            <p class="flavor-desc">rich custard swirled into every bite</p>
             <div class="flavor-avail">coming soon</div>
           </div>
-        </div>
+        </article>
 
-        <div class="flavor-card">
+        <article class="flavor-card">
           <div class="flavor-img-wrap flavor-img-wrap--crop-top">
             <img src="images/classic_sourdough.jpg" alt="classic sourdough" />
           </div>
           <div class="flavor-body">
-            <div class="flavor-name">classic sourdough</div>
-            <div class="flavor-desc">the one that started it all</div>
+            <h3 class="flavor-name">classic sourdough</h3>
+            <p class="flavor-desc">the one that started it all</p>
             <div class="flavor-avail">coming soon</div>
           </div>
-        </div>
+        </article>
 
-        <div class="flavor-card">
+        <article class="flavor-card">
           <div class="flavor-img-wrap">
-            <img src="images/strawberry_shortcake.jpg" alt="Strawberry Shortcake" />
+            <img src="images/strawberry_shortcake.jpg" alt="strawberry shortcake" />
           </div>
           <div class="flavor-body">
-            <div class="flavor-name">strawberry shortcake</div>
-            <div class="flavor-desc">sweet, creamy, unapologetically dessert</div>
+            <h3 class="flavor-name">strawberry shortcake</h3>
+            <p class="flavor-desc">sweet, creamy, unapologetically dessert</p>
             <div class="flavor-avail">coming soon</div>
           </div>
-        </div>
+        </article>
 
-        <div class="flavor-card">
+        <article class="flavor-card">
           <div class="flavor-img-wrap">
             <img src="images/matcha.jpg" alt="matcha" />
           </div>
           <div class="flavor-body">
-            <div class="flavor-name">matcha</div>
-            <div class="flavor-desc">earthy, smooth, quietly addictive</div>
+            <h3 class="flavor-name">matcha</h3>
+            <p class="flavor-desc">earthy, smooth, quietly addictive</p>
             <div class="flavor-avail">coming soon</div>
           </div>
-        </div>
+        </article>
 
-        <div class="flavor-card">
+        <article class="flavor-card">
           <div class="flavor-img-wrap">
             <img src="images/tiramisu.jpg" alt="tiramisu" />
           </div>
           <div class="flavor-body">
-            <div class="flavor-name">tiramisu</div>
-            <div class="flavor-desc">coffee-soaked and made for late nights</div>
+            <h3 class="flavor-name">tiramisu</h3>
+            <p class="flavor-desc">coffee-soaked and made for late nights</p>
             <div class="flavor-avail">coming soon</div>
           </div>
-        </div>
+        </article>
       </div>
     </div>
 
@@ -1376,24 +1356,20 @@
       }
     })();
 
-    (function () {
+    (function() {
       const track = document.querySelector('.carousel-track');
       if (!track) return;
 
-      // Duplicate all cards once to create a seamless loop
-      const originalCards = Array.from(track.children);
-      originalCards.forEach(card => {
-        track.appendChild(card.cloneNode(true));
-      });
-
-      let halfWidth = track.scrollWidth / 2;
-      window.addEventListener('resize', () => {
-        halfWidth = track.scrollWidth / 2;
-      });
+      // duplicate cards for infinite loop
+      track.innerHTML = track.innerHTML + track.innerHTML;
+      const halfWidth = track.scrollWidth / 2;
 
       let autoScrolling = true;
-      let animationId;
+      let isDown = false;
+      let startX, scrollStart;
+      let touchStart, touchScrollStart;
 
+      // AUTO SCROLL
       function tick() {
         if (autoScrolling) {
           track.scrollLeft += 0.3;
@@ -1401,15 +1377,11 @@
             track.scrollLeft -= halfWidth;
           }
         }
-        animationId = requestAnimationFrame(tick);
+        requestAnimationFrame(tick);
       }
       requestAnimationFrame(tick);
 
-      // Mouse drag
-      let isDown = false;
-      let startX;
-      let scrollStart;
-
+      // MOUSE DRAG
       track.addEventListener('mousedown', (e) => {
         isDown = true;
         autoScrolling = false;
@@ -1418,41 +1390,32 @@
         track.style.cursor = 'grabbing';
         e.preventDefault();
       });
-
       document.addEventListener('mouseup', () => {
         if (!isDown) return;
         isDown = false;
         track.style.cursor = 'grab';
         setTimeout(() => { autoScrolling = true; }, 1500);
       });
-
       document.addEventListener('mousemove', (e) => {
         if (!isDown) return;
         const x = e.pageX - track.offsetLeft;
-        const dist = (x - startX) * 1.5;
-        track.scrollLeft = scrollStart - dist;
+        track.scrollLeft = scrollStart - (x - startX) * 1.5;
         if (track.scrollLeft >= halfWidth) track.scrollLeft -= halfWidth;
         if (track.scrollLeft < 0) track.scrollLeft += halfWidth;
       });
 
-      // Touch (mobile)
-      let touchStart;
-      let touchScrollStart;
-
+      // TOUCH
       track.addEventListener('touchstart', (e) => {
         autoScrolling = false;
-        touchStart = e.touches[0].pageX - track.offsetLeft;
+        touchStart = e.touches[0].pageX;
         touchScrollStart = track.scrollLeft;
       }, { passive: true });
-
       track.addEventListener('touchmove', (e) => {
-        const x = e.touches[0].pageX - track.offsetLeft;
-        const dist = (x - touchStart) * 1.5;
-        track.scrollLeft = touchScrollStart - dist;
+        const x = e.touches[0].pageX;
+        track.scrollLeft = touchScrollStart - (x - touchStart) * 1.5;
         if (track.scrollLeft >= halfWidth) track.scrollLeft -= halfWidth;
         if (track.scrollLeft < 0) track.scrollLeft += halfWidth;
       }, { passive: true });
-
       track.addEventListener('touchend', () => {
         setTimeout(() => { autoScrolling = true; }, 1500);
       });
