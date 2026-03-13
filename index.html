@@ -928,7 +928,7 @@
       }
 
       .bread-float {
-        width: 130px;
+        width: 200px;
         height: auto;
       }
 
@@ -996,6 +996,28 @@
 
       .flavor-card {
         width: 280px;
+      }
+
+      .carousel-track {
+        display: flex;
+        overflow-x: scroll;
+        scroll-behavior: smooth;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+        scroll-snap-type: x mandatory;
+        gap: 16px;
+        padding: 0 20px;
+        animation: none !important;
+      }
+
+      .carousel-track::-webkit-scrollbar {
+        display: none;
+      }
+
+      .flavor-card {
+        scroll-snap-align: start;
+        flex-shrink: 0;
       }
 
       .urgency-progress {
@@ -1126,11 +1148,11 @@
   <section class="hero">
 
     <!-- Floating bread slices -->
-    <img class="bread-float bread-artesian" src="images/regular_artesian.png" alt="the closure" />
-    <img class="bread-float bread-creme" src="images/creme_brulee.png" alt="the almost" />
-    <img class="bread-float bread-strawberry" src="images/strawberry_cheesecake.png" alt="the rebound" />
-    <img class="bread-float bread-matcha" src="images/matcha.png" alt="the moving on" />
-    <img class="bread-float bread-tiramisu" src="images/tiramisu.png" alt="the 3am" />
+    <img class="bread-float bread-artesian" src="images/regular_artesian.png" alt="classic sourdough" />
+    <img class="bread-float bread-creme" src="images/creme_brulee.png" alt="crème brûlée" />
+    <img class="bread-float bread-strawberry" src="images/strawberry_cheesecake.png" alt="strawberry shortcake" />
+    <img class="bread-float bread-matcha" src="images/matcha.png" alt="matcha" />
+    <img class="bread-float bread-tiramisu" src="images/tiramisu.png" alt="tiramisu" />
 
     <!-- Hero content -->
     <h1 class="hero-headline">bread for<br>the hard days.</h1>
@@ -1151,10 +1173,10 @@
       <div class="carousel-track" id="carouselTrack">
         <div class="flavor-card">
           <div class="flavor-img-wrap">
-            <img src="images/cinnamon.jpg" alt="the situationship" />
+            <img src="images/cinnamon.jpg" alt="cinnamon swirl" />
           </div>
           <div class="flavor-body">
-            <div class="flavor-name">the situationship</div>
+            <div class="flavor-name">cinnamon swirl</div>
             <div class="flavor-desc">for when you need something warm and familiar</div>
             <div class="flavor-avail">coming friday drops</div>
           </div>
@@ -1162,10 +1184,10 @@
 
         <div class="flavor-card">
           <div class="flavor-img-wrap">
-            <img src="images/nutella.jpg" alt="the apology" />
+            <img src="images/nutella.jpg" alt="nutella" />
           </div>
           <div class="flavor-body">
-            <div class="flavor-name">the apology</div>
+            <div class="flavor-name">nutella</div>
             <div class="flavor-desc">for when you need something dark and comforting</div>
             <div class="flavor-avail">coming friday drops</div>
           </div>
@@ -1173,10 +1195,10 @@
 
         <div class="flavor-card">
           <div class="flavor-img-wrap">
-            <img src="images/creme_brule.jpg" alt="the almost" />
+            <img src="images/creme_brule.jpg" alt="crème brûlée" />
           </div>
           <div class="flavor-body">
-            <div class="flavor-name">the almost</div>
+            <div class="flavor-name">crème brûlée</div>
             <div class="flavor-desc">for when you deserve something beautiful</div>
             <div class="flavor-avail">coming friday drops</div>
           </div>
@@ -1184,10 +1206,10 @@
 
         <div class="flavor-card">
           <div class="flavor-img-wrap flavor-img-wrap--crop-top">
-            <img src="images/classic_sourdough.jpg" alt="the closure" />
+            <img src="images/classic_sourdough.jpg" alt="classic sourdough" />
           </div>
           <div class="flavor-body">
-            <div class="flavor-name">the closure</div>
+            <div class="flavor-name">classic sourdough</div>
             <div class="flavor-desc">for when simple is exactly enough</div>
             <div class="flavor-avail">coming friday drops</div>
           </div>
@@ -1206,10 +1228,10 @@
 
         <div class="flavor-card">
           <div class="flavor-img-wrap">
-            <img src="images/matcha.jpg" alt="the moving on" />
+            <img src="images/matcha.jpg" alt="matcha" />
           </div>
           <div class="flavor-body">
-            <div class="flavor-name">the moving on</div>
+            <div class="flavor-name">matcha</div>
             <div class="flavor-desc">for the morning after</div>
             <div class="flavor-avail">coming friday drops</div>
           </div>
@@ -1217,10 +1239,10 @@
 
         <div class="flavor-card">
           <div class="flavor-img-wrap">
-            <img src="images/tiramisu.jpg" alt="the 3am" />
+            <img src="images/tiramisu.jpg" alt="tiramisu" />
           </div>
           <div class="flavor-body">
-            <div class="flavor-name">the 3am</div>
+            <div class="flavor-name">tiramisu</div>
             <div class="flavor-desc">for when coffee isn't enough</div>
             <div class="flavor-avail">coming friday drops</div>
           </div>
