@@ -327,25 +327,25 @@
 
     .carousel-viewport {
       overflow: hidden;
-      cursor: grab;
-      -webkit-user-select: none;
-      user-select: none;
-      touch-action: pan-y;
-      overscroll-behavior-x: contain;
-    }
-
-    @keyframes scroll {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(-50%); }
     }
 
     .carousel-track {
       display: flex;
       gap: 24px;
-      will-change: transform;
-      backface-visibility: hidden;
-      overscroll-behavior-x: contain;
-      animation: scroll 15s linear infinite;
+      overflow-x: scroll;
+      overflow-y: hidden;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      cursor: grab;
+      scroll-behavior: auto;
+      -webkit-overflow-scrolling: touch;
+      will-change: scroll-position;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    .carousel-track::-webkit-scrollbar {
+      display: none;
     }
 
     .flavor-card {
@@ -998,28 +998,6 @@
         width: 280px;
       }
 
-      .carousel-track {
-        display: flex;
-        overflow-x: scroll;
-        scroll-behavior: smooth;
-        -webkit-overflow-scrolling: touch;
-        scrollbar-width: none;
-        -ms-overflow-style: none;
-        scroll-snap-type: x mandatory;
-        gap: 16px;
-        padding: 0 20px;
-        animation: none !important;
-      }
-
-      .carousel-track::-webkit-scrollbar {
-        display: none;
-      }
-
-      .flavor-card {
-        scroll-snap-align: start;
-        flex-shrink: 0;
-      }
-
       .urgency-progress {
         display: none;
       }
@@ -1164,21 +1142,19 @@
 
   <!-- This Week's Drop -->
   <section class="drop-section" id="drops">
-    <span class="drop-label">coming soon</span>
-    <div class="drop-date">march 7, 2026</div>
-    <h2 class="drop-headline">what we're making.</h2>
+    <h2 class="drop-headline">the lineup.</h2>
     <hr class="drop-rule" />
 
-    <div class="carousel-viewport" id="carousel">
-      <div class="carousel-track" id="carouselTrack">
+    <div class="carousel-viewport">
+      <div class="carousel-track">
         <div class="flavor-card">
           <div class="flavor-img-wrap">
             <img src="images/cinnamon.jpg" alt="cinnamon swirl" />
           </div>
           <div class="flavor-body">
             <div class="flavor-name">cinnamon swirl</div>
-            <div class="flavor-desc">for when you need something warm and familiar</div>
-            <div class="flavor-avail">coming friday drops</div>
+            <div class="flavor-desc">warm, familiar, and a little too good</div>
+            <div class="flavor-avail">coming soon</div>
           </div>
         </div>
 
@@ -1188,8 +1164,8 @@
           </div>
           <div class="flavor-body">
             <div class="flavor-name">nutella</div>
-            <div class="flavor-desc">for when you need something dark and comforting</div>
-            <div class="flavor-avail">coming friday drops</div>
+            <div class="flavor-desc">dark, indulgent, no explanation needed</div>
+            <div class="flavor-avail">coming soon</div>
           </div>
         </div>
 
@@ -1199,8 +1175,8 @@
           </div>
           <div class="flavor-body">
             <div class="flavor-name">crème brûlée</div>
-            <div class="flavor-desc">for when you deserve something beautiful</div>
-            <div class="flavor-avail">coming friday drops</div>
+            <div class="flavor-desc">rich custard swirled into every bite</div>
+            <div class="flavor-avail">coming soon</div>
           </div>
         </div>
 
@@ -1210,8 +1186,8 @@
           </div>
           <div class="flavor-body">
             <div class="flavor-name">classic sourdough</div>
-            <div class="flavor-desc">for when simple is exactly enough</div>
-            <div class="flavor-avail">coming friday drops</div>
+            <div class="flavor-desc">the one that started it all</div>
+            <div class="flavor-avail">coming soon</div>
           </div>
         </div>
 
@@ -1221,8 +1197,8 @@
           </div>
           <div class="flavor-body">
             <div class="flavor-name">strawberry shortcake</div>
-            <div class="flavor-desc">for the one who always ordered dessert first</div>
-            <div class="flavor-avail">coming friday drops</div>
+            <div class="flavor-desc">sweet, creamy, unapologetically dessert</div>
+            <div class="flavor-avail">coming soon</div>
           </div>
         </div>
 
@@ -1232,8 +1208,8 @@
           </div>
           <div class="flavor-body">
             <div class="flavor-name">matcha</div>
-            <div class="flavor-desc">for the morning after</div>
-            <div class="flavor-avail">coming friday drops</div>
+            <div class="flavor-desc">earthy, smooth, quietly addictive</div>
+            <div class="flavor-avail">coming soon</div>
           </div>
         </div>
 
@@ -1243,8 +1219,8 @@
           </div>
           <div class="flavor-body">
             <div class="flavor-name">tiramisu</div>
-            <div class="flavor-desc">for when coffee isn't enough</div>
-            <div class="flavor-avail">coming friday drops</div>
+            <div class="flavor-desc">coffee-soaked and made for late nights</div>
+            <div class="flavor-avail">coming soon</div>
           </div>
         </div>
       </div>
@@ -1401,56 +1377,84 @@
     })();
 
     (function () {
-      var carousel = document.getElementById('carousel');
-      if (!carousel) return;
+      const track = document.querySelector('.carousel-track');
+      if (!track) return;
 
-      var isMobile = window.matchMedia('(max-width: 768px)').matches;
-      if (!isMobile) {
-        return;
-      }
+      // Duplicate all cards once to create a seamless loop
+      const originalCards = Array.from(track.children);
+      originalCards.forEach(card => {
+        track.appendChild(card.cloneNode(true));
+      });
 
-      var autoScrollId = null;
+      let halfWidth = track.scrollWidth / 2;
+      window.addEventListener('resize', () => {
+        halfWidth = track.scrollWidth / 2;
+      });
 
-      function pauseAutoScroll() {
-        if (autoScrollId) {
-          clearInterval(autoScrollId);
-          autoScrollId = null;
-        }
-      }
+      let autoScrolling = true;
+      let animationId;
 
-      function resumeAutoScroll() {
-        if (autoScrollId) return;
-        autoScrollId = setInterval(function () {
-          carousel.scrollLeft += 3;
-          if (carousel.scrollLeft + carousel.clientWidth >= carousel.scrollWidth) {
-            carousel.scrollLeft = 0;
+      function tick() {
+        if (autoScrolling) {
+          track.scrollLeft += 0.3;
+          if (track.scrollLeft >= halfWidth) {
+            track.scrollLeft -= halfWidth;
           }
-        }, 16);
+        }
+        animationId = requestAnimationFrame(tick);
       }
+      requestAnimationFrame(tick);
 
-      resumeAutoScroll();
-
-      let startX = 0;
-      let scrollLeft = 0;
+      // Mouse drag
       let isDown = false;
+      let startX;
+      let scrollStart;
 
-      carousel.addEventListener('touchstart', function (e) {
+      track.addEventListener('mousedown', (e) => {
         isDown = true;
-        startX = e.touches[0].pageX - carousel.offsetLeft;
-        scrollLeft = carousel.scrollLeft;
-        pauseAutoScroll();
-      }, { passive: true });
+        autoScrolling = false;
+        startX = e.pageX - track.offsetLeft;
+        scrollStart = track.scrollLeft;
+        track.style.cursor = 'grabbing';
+        e.preventDefault();
+      });
 
-      carousel.addEventListener('touchmove', function (e) {
+      document.addEventListener('mouseup', () => {
         if (!isDown) return;
-        const x = e.touches[0].pageX - carousel.offsetLeft;
-        const walk = (x - startX) * 2;
-        carousel.scrollLeft = scrollLeft - walk;
+        isDown = false;
+        track.style.cursor = 'grab';
+        setTimeout(() => { autoScrolling = true; }, 1500);
+      });
+
+      document.addEventListener('mousemove', (e) => {
+        if (!isDown) return;
+        const x = e.pageX - track.offsetLeft;
+        const dist = (x - startX) * 1.5;
+        track.scrollLeft = scrollStart - dist;
+        if (track.scrollLeft >= halfWidth) track.scrollLeft -= halfWidth;
+        if (track.scrollLeft < 0) track.scrollLeft += halfWidth;
+      });
+
+      // Touch (mobile)
+      let touchStart;
+      let touchScrollStart;
+
+      track.addEventListener('touchstart', (e) => {
+        autoScrolling = false;
+        touchStart = e.touches[0].pageX - track.offsetLeft;
+        touchScrollStart = track.scrollLeft;
       }, { passive: true });
 
-      carousel.addEventListener('touchend', function () {
-        isDown = false;
-        setTimeout(resumeAutoScroll, 1000);
+      track.addEventListener('touchmove', (e) => {
+        const x = e.touches[0].pageX - track.offsetLeft;
+        const dist = (x - touchStart) * 1.5;
+        track.scrollLeft = touchScrollStart - dist;
+        if (track.scrollLeft >= halfWidth) track.scrollLeft -= halfWidth;
+        if (track.scrollLeft < 0) track.scrollLeft += halfWidth;
+      }, { passive: true });
+
+      track.addEventListener('touchend', () => {
+        setTimeout(() => { autoScrolling = true; }, 1500);
       });
     })();
   </script>
