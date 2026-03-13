@@ -644,6 +644,9 @@
       gap: 12px;
       width: 100%;
       justify-content: center;
+      opacity: 1;
+      transform: translateY(0);
+      transition: opacity 0.3s ease, transform 0.3s ease;
     }
 
     .waitlist-input {
@@ -686,12 +689,31 @@
     .waitlist-success {
       margin-top: 40px;
       text-align: left;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.3s ease, transform 0.3s ease;
     }
 
     .waitlist-check {
-      font-size: 24px;
-      color: var(--accent);
       margin-bottom: 8px;
+      display: inline-block;
+    }
+
+    .waitlist-check svg {
+      width: 32px;
+      height: 32px;
+      display: block;
+    }
+
+    .waitlist-check-path {
+      stroke: var(--accent);
+      stroke-width: 3;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
+      stroke-dasharray: 60;
+      stroke-dashoffset: 60;
+      animation: drawCheck 0.5s ease-out forwards 0.15s;
     }
 
     .waitlist-success-headline {
@@ -705,6 +727,12 @@
       font-size: 14px;
       color: #888;
       margin-top: 4px;
+    }
+
+    @keyframes drawCheck {
+      to {
+        stroke-dashoffset: 0;
+      }
     }
 
     .waitlist-fine-print {
@@ -1309,9 +1337,13 @@
       </form>
 
       <div id="waitlistSuccess" class="waitlist-success">
-        <div class="waitlist-check">✓</div>
-        <div class="waitlist-success-headline">you're on the list.</div>
-        <div class="waitlist-success-text">we'll be in touch before launch.</div>
+        <div class="waitlist-check">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path class="waitlist-check-path" d="M4 13.5l5 5 11-13" />
+          </svg>
+        </div>
+        <div class="waitlist-success-headline">saved you a loaf.</div>
+        <div class="waitlist-success-text">fresh drops. friday mornings. your inbox.</div>
       </div>
 
       <div class="waitlist-fine-print">no spam. just your friday drop notification.</div>
@@ -1347,13 +1379,23 @@
         success.style.display = 'none';
         form.addEventListener('submit', function (e) {
           e.preventDefault();
-          form.style.display = 'none';
-          success.style.display = 'block';
-          success.style.opacity = '0';
-          requestAnimationFrame(function () {
-            success.style.transition = 'opacity 0.5s ease';
-            success.style.opacity = '1';
-          });
+
+          // fade form out
+          form.style.opacity = '0';
+          form.style.transform = 'translateY(-10px)';
+
+          setTimeout(function () {
+            form.style.display = 'none';
+            success.style.display = 'block';
+            // prepare success state
+            success.style.opacity = '0';
+            success.style.transform = 'translateY(10px)';
+
+            requestAnimationFrame(function () {
+              success.style.opacity = '1';
+              success.style.transform = 'translateY(0)';
+            });
+          }, 300);
         });
       }
     })();
