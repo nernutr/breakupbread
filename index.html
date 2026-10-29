@@ -729,6 +729,14 @@
       margin-top: 4px;
     }
 
+    .waitlist-error {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      color: #FFB3B3;
+      margin-top: 12px;
+      min-height: 1.2em;
+    }
+
     @keyframes drawCheck {
       to {
         stroke-dashoffset: 0;
@@ -1346,6 +1354,7 @@
         <div class="waitlist-success-text">fresh drops. friday mornings. your inbox.</div>
       </div>
 
+      <div id="waitlistError" class="waitlist-error" style="display: none;"></div>
       <div class="waitlist-fine-print">no spam. just your friday drop notification.</div>
       <div class="waitlist-privacy">by joining you agree to receive emails from breakup bread. we will never sell your data. → <a href="privacy-policy.html">privacy policy</a></div>
       <div class="waitlist-social-proof">🍞 be one of the first in miami.</div>
@@ -1363,7 +1372,13 @@
     </div>
   </footer>
 
-  <script>
+  <script type="module">
+    import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+
+    const SUPABASE_URL = 'https://ewexemdzeqtjgmgfywby.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV3ZXhlbWR6ZXF0amdtZ2Z5d2J5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI1OTYzNTUsImV4cCI6MjA4ODE3MjM1NX0.5QtyAAI2v3cON-W3ysdSjTZ4qn0bmLEYfmKjXqdRt3E';
+    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
     (function () {
       document.querySelectorAll('[data-scroll="waitlist"]').forEach(function (el) {
         el.addEventListener('click', function (e) {
@@ -1375,28 +1390,81 @@
 
       var form = document.getElementById('waitlistForm');
       var success = document.getElementById('waitlistSuccess');
+      var errorEl = document.getElementById('waitlistError');
+      var emailInput = document.getElementById('waitlistEmail');
+      var submitBtn = form ? form.querySelector('.waitlist-btn') : null;
+
+      async function handleWaitlistSubmit(e) {
+        e.preventDefault();
+        if (!form || !success || !emailInput) return;
+
+        if (errorEl) {
+          errorEl.style.display = 'none';
+          errorEl.textContent = '';
+        }
+
+        var emailValue = emailInput.value.trim();
+        if (!emailValue) return;
+
+        if (submitBtn) {
+          submitBtn.disabled = true;
+          submitBtn.textContent = 'sending...';
+        }
+
+        let ok = false;
+        try {
+          const { data, error } = await supabase
+            .from('waitlist')
+            .insert({ email: emailValue });
+
+          console.log('waitlist insert result', { data, error });
+
+          if (!error) {
+            ok = true;
+          } else if (error.code === '23505') {
+            // duplicate email – treat as success
+            ok = true;
+          } else {
+            console.error('waitlist insert error', error);
+          }
+        } catch (err) {
+          console.error('waitlist unexpected error', err);
+        }
+
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'get early access';
+        }
+
+        if (!ok) {
+          if (errorEl) {
+            errorEl.textContent = 'something went wrong. try again.';
+            errorEl.style.display = 'block';
+          }
+          return;
+        }
+
+        // fade form out
+        form.style.opacity = '0';
+        form.style.transform = 'translateY(-10px)';
+
+        setTimeout(function () {
+          form.style.display = 'none';
+          success.style.display = 'block';
+          // prepare success state
+          success.style.opacity = '0';
+          success.style.transform = 'translateY(10px)';
+
+          requestAnimationFrame(function () {
+            success.style.opacity = '1';
+            success.style.transform = 'translateY(0)';
+          });
+        }, 300);
+      }
+
       if (form && success) {
         success.style.display = 'none';
-        form.addEventListener('submit', function (e) {
-          e.preventDefault();
-
-          // fade form out
-          form.style.opacity = '0';
-          form.style.transform = 'translateY(-10px)';
-
-          setTimeout(function () {
-            form.style.display = 'none';
-            success.style.display = 'block';
-            // prepare success state
-            success.style.opacity = '0';
-            success.style.transform = 'translateY(10px)';
-
-            requestAnimationFrame(function () {
-              success.style.opacity = '1';
-              success.style.transform = 'translateY(0)';
-            });
-          }, 300);
-        });
+        form.addEventListener('submit', handleWaitlistSubmit);
       }
     })();
 
