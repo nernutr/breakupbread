@@ -244,8 +244,8 @@
 
   /* Gift */
   .gift { background: var(--brown); color: var(--cream); }
-  .gift-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(2.5rem, 7vw, 7rem); align-items: center; }
-  .gift img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 0.5rem; }
+  .gift-grid { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr); gap: clamp(2.5rem, 6vw, 6rem); align-items: center; }
+  .gift img { width: 100%; aspect-ratio: 1024 / 572; object-fit: cover; border-radius: 0.5rem; }
   .gift .label { color: var(--on-brown-2); }
   .for-list { list-style: none; margin: 1.5rem 0 2rem; padding: 0; }
   .for-list li { font: 400 var(--step-3)/1.08 var(--serif); letter-spacing: -0.03em; color: var(--on-brown-2); }
@@ -486,7 +486,7 @@
 
   <section class="section gift" id="gift">
     <div class="wrap gift-grid">
-      <figure data-reveal><img src="images/box_full.webp" srcset="images/box_full-640.webp 640w, images/box_full.webp 1024w" sizes="(max-width: 960px) 92vw, 45vw" alt="An open Breakup Bread box; the lid reads: the hard part is over." width="1024" height="1024" loading="lazy" decoding="async"></figure>
+      <figure data-reveal><img src="images/gift_box.webp" srcset="images/gift_box-640.webp 640w, images/gift_box.webp 1024w" sizes="(max-width: 960px) 92vw, 55vw" alt="Hands lifting wax-sealed, paper-wrapped slices of Breakup Bread out of an open kraft box whose lid reads: the hard part is over." width="1024" height="572" loading="lazy" decoding="async"></figure>
       <div>
         <p class="label">made to be sent</p>
         <ul class="for-list">
