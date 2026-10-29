@@ -85,7 +85,7 @@
   .btn-terra:hover { background: var(--terra-hover); border-color: var(--terra-hover); }
 
   /* Header */
-  .site-head { position: sticky; top: 0; z-index: 20; background: var(--tint, var(--cream)); border-bottom: 1px solid transparent; transition: background-color 0.9s var(--ease), border-color 0.3s; }
+  .site-head { position: sticky; top: 0; z-index: 20; background: transparent; border-bottom: 1px solid transparent; transition: background-color 0.3s, border-color 0.3s; }
   .site-head.is-plain { background: var(--cream); border-color: var(--line); }
   .head-in { display: flex; align-items: center; justify-content: space-between; gap: 1rem; height: 4.25rem; }
   .mark { font: 700 1.08rem/0.84 var(--sans); letter-spacing: -0.05em; text-decoration: none; }
@@ -98,7 +98,15 @@
   .stage {
     --n: clamp(3.4rem, min(14vw, 19svh), 14.5rem);
     --w: min(74vw, 38rem, 64svh);
-    background: var(--tint, var(--cream)); transition: background-color 0.9s var(--ease); padding-block: clamp(1rem, 3vw, 2rem) clamp(2rem, 4vw, 3rem); }
+    position: relative; isolation: isolate;
+    margin-top: -4.25rem; /* runs under the transparent header */
+    padding-block: calc(4.25rem + clamp(1rem, 3vw, 2rem)) clamp(2rem, 4vw, 3rem);
+  }
+  /* Flavor tints crossfade as stacked layers: opacity only, no repaints. */
+  .tints, .tints i { position: absolute; inset: 0; }
+  .tints { z-index: -1; }
+  .tints i { opacity: 0; transition: opacity 0.9s var(--ease); }
+  .tints i.is-on { opacity: 1; }
   .stage-in { display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: auto 1fr auto auto; min-height: min(calc(100svh - 4.25rem), 58rem); }
   .stage-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; }
   .stage h1 { font-size: var(--step-2); font-weight: 400; line-height: 1.1; letter-spacing: -0.02em; }
@@ -115,12 +123,16 @@
     opacity: 0; transform: translateY(0.12em); transition: opacity 0.25s, transform 0.25s;
   }
   .name.is-on { opacity: 1; transform: none; transition: opacity 0.6s var(--ease) 0.2s, transform 0.9s var(--ease) 0.2s; }
-  .slices { grid-area: 1 / 1; z-index: 1; width: var(--w); margin-top: calc(var(--n) * 0.5 - var(--w) * 0.24); margin-bottom: calc(var(--w) * -0.2); pointer-events: none; }
+  .slices { position: relative; grid-area: 1 / 1; z-index: 1; width: var(--w); margin-top: calc(var(--n) * 0.5 - var(--w) * 0.24); margin-bottom: calc(var(--w) * -0.2); pointer-events: none; }
+  /* A static contact shadow; a live drop-shadow filter on five large images is what made it stutter. */
+  .slices::before {
+    content: ""; position: absolute; z-index: -1; left: 18%; right: 18%; top: 66%; height: 14%;
+    background: radial-gradient(closest-side, oklch(30% 0.04 45 / 0.2), oklch(30% 0.04 45 / 0));
+  }
   .slice {
     width: 100%; aspect-ratio: 1; object-fit: contain;
     --s: 1; --ty: 0%;
     opacity: 0; transform: translateY(var(--ty)) rotate(-18deg) scale(calc(var(--s) * 0.9));
-    filter: drop-shadow(0 1.8rem 2rem oklch(30% 0.04 45 / 0.22));
     transition: opacity 0.5s var(--ease), transform 1.1s var(--ease);
   }
   .slice.is-on { opacity: 1; transform: translateY(var(--ty)) rotate(-6deg) scale(var(--s)); }
@@ -171,8 +183,8 @@
   .strip::-webkit-scrollbar { display: none; }
   .card { scroll-snap-align: start; }
   .card .ph { aspect-ratio: 4 / 5; overflow: hidden; border-radius: 0.5rem; background: var(--cream-2); }
-  .card img { width: 100%; height: 100%; object-fit: cover; transform: scale(1.18); filter: sepia(0.1); transition: transform 0.8s var(--ease); }
-  .card:hover img { transform: scale(1.26); }
+  .card img { width: 100%; height: 100%; object-fit: cover; transform: scale(1.18); transition: transform 0.8s var(--ease); }
+  @media (hover: hover) { .card:hover img { transform: scale(1.26); } }
   .card-meta { display: flex; justify-content: space-between; align-items: baseline; gap: 0.75rem; margin-top: 1rem; }
   .card h3 { font-size: var(--step-2); letter-spacing: -0.025em; }
   .card p { margin-top: 0.35rem; color: var(--ink-2); font-size: 0.95rem; }
@@ -261,18 +273,36 @@
     .how ol { grid-template-columns: 1fr; }
   }
   @media (max-width: 600px) {
-    .stage { --n: 15vw; --w: 94vw; }
-    .stage-in { min-height: 0; }
-    .stage-center { padding-block: 2.5rem 0; }
-    .stage-bottom { flex-direction: column; align-items: stretch; }
-    .ctas .btn { flex: 1; }
+    /* Hero: only the bread and its name. Swipe or tap to change flavor. */
+    .stage { --n: 15vw; --w: 94vw; padding-block: 4.25rem 0; touch-action: pan-y; }
+    .stage-in { min-height: calc(100svh - 4.25rem); grid-template-rows: 1fr; }
+    .stage-top { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+    .stage-bottom, .picker { display: none; }
+    .stage-center { padding-block: 0 6svh; }
+
+    /* Flavors: photos and names only. */
+    .sec-head .label, .sec-head p, .card p, .pill { display: none; }
+
+    /* Post it: the photo fills the screen and the type sits on it. */
+    .post { position: relative; display: flex; align-items: flex-end; min-height: 100svh; padding-block: 0 2.75rem; color: var(--cream); }
+    .post-grid { display: block; }
+    .post figure { position: absolute; inset: 0; width: auto; }
+    .post figure img { height: 100%; aspect-ratio: auto; border-radius: 0; object-position: 30% 40%; }
+    .post figure::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, oklch(16% 0.02 45 / 0.92), oklch(16% 0.02 45 / 0) 58%); }
+    .post-grid > div { position: relative; z-index: 1; }
+    .post .label { color: var(--on-brown); }
+    .post h2 { margin: 0.75rem 0 0.6rem; }
+    .post p:not(.big):not(.label) { display: none; }
+
+    /* No scroll reveals on phones: content is simply there. */
+    .js [data-reveal] { opacity: 1; transform: none; transition: none; }
     .join .btn { flex: 1 1 100%; }
   }
 </style>
 </head>
 <body>
 
-<header class="site-head" data-tinted>
+<header class="site-head">
   <div class="wrap head-in">
     <a class="mark" href="#top" aria-label="Breakup Bread, home">breakup<br>bread</a>
     <nav class="nav" aria-label="Primary">
@@ -286,7 +316,14 @@
 </header>
 
 <main id="top">
-  <section class="stage" data-stage data-tinted aria-roledescription="carousel" aria-label="Flavors in rotation">
+  <section class="stage" data-stage aria-roledescription="carousel" aria-label="Flavors in rotation">
+    <div class="tints" aria-hidden="true">
+      <i class="is-on" style="background: var(--tint-classic)"></i>
+      <i style="background: var(--tint-brulee)"></i>
+      <i style="background: var(--tint-strawberry)"></i>
+      <i style="background: var(--tint-matcha)"></i>
+      <i style="background: var(--tint-tiramisu)"></i>
+    </div>
     <div class="wrap stage-in">
       <div class="stage-top">
         <h1>dessert sourdough,<br>in rotation.</h1>
@@ -302,11 +339,11 @@
           <p class="name">tiramisu</p>
         </div>
         <div class="slices">
-          <img class="slice is-on" style="--s:1.03;--ty:0.6%" src="images/regular_artesian.png" alt="A slice of classic sourdough" width="1024" height="1024" fetchpriority="high">
-          <img class="slice" style="--s:1.02;--ty:8.2%" src="images/creme_brulee.png" alt="A slice of crème brûlée sourdough" width="1024" height="1024">
-          <img class="slice" style="--s:0.94;--ty:2.1%" src="images/strawberry_cheesecake.png" alt="A slice of strawberry shortcake sourdough" width="1024" height="1024">
-          <img class="slice" style="--s:0.89;--ty:0.8%" src="images/matcha.png" alt="A slice of matcha sourdough" width="1024" height="1024">
-          <img class="slice" style="--s:0.84;--ty:8.5%" src="images/tiramisu.png" alt="A slice of tiramisu sourdough" width="1024" height="1024">
+          <img class="slice is-on" style="--s:1.03;--ty:0.6%" src="images/regular_artesian.webp" srcset="images/regular_artesian-640.webp 640w, images/regular_artesian.webp 1024w" sizes="(max-width: 600px) 94vw, min(74vw, 38rem)" alt="A slice of classic sourdough" width="1024" height="1024" fetchpriority="high">
+          <img class="slice" style="--s:1.02;--ty:8.2%" data-src="images/creme_brulee.webp" data-srcset="images/creme_brulee-640.webp 640w, images/creme_brulee.webp 1024w" sizes="(max-width: 600px) 94vw, min(74vw, 38rem)" alt="A slice of crème brûlée sourdough" width="1024" height="1024" decoding="async">
+          <img class="slice" style="--s:0.94;--ty:2.1%" data-src="images/strawberry_cheesecake.webp" data-srcset="images/strawberry_cheesecake-640.webp 640w, images/strawberry_cheesecake.webp 1024w" sizes="(max-width: 600px) 94vw, min(74vw, 38rem)" alt="A slice of strawberry shortcake sourdough" width="1024" height="1024" decoding="async">
+          <img class="slice" style="--s:0.89;--ty:0.8%" data-src="images/matcha.webp" data-srcset="images/matcha-640.webp 640w, images/matcha.webp 1024w" sizes="(max-width: 600px) 94vw, min(74vw, 38rem)" alt="A slice of matcha sourdough" width="1024" height="1024" decoding="async">
+          <img class="slice" style="--s:0.84;--ty:8.5%" data-src="images/tiramisu.webp" data-srcset="images/tiramisu-640.webp 640w, images/tiramisu.webp 1024w" sizes="(max-width: 600px) 94vw, min(74vw, 38rem)" alt="A slice of tiramisu sourdough" width="1024" height="1024" decoding="async">
         </div>
       </div>
 
@@ -348,19 +385,19 @@
       </header>
     </div>
     <ol class="strip" data-strip>
-      <li class="card"><div class="ph"><img src="images/cinnamon.jpg" alt="Cinnamon swirl sourdough slice" loading="lazy"></div><div class="card-meta"><h3>cinnamon swirl</h3><span class="pill on">drop 001</span></div><p>warm, familiar, and a little too good</p></li>
-      <li class="card"><div class="ph"><img src="images/creme_brule.jpg" alt="Crème brûlée sourdough slice" loading="lazy"></div><div class="card-meta"><h3>crème brûlée</h3><span class="pill on">drop 001</span></div><p>rich custard swirled into every bite</p></li>
-      <li class="card"><div class="ph"><img src="images/strawberry_shortcake.jpg" alt="Strawberry shortcake sourdough slice" loading="lazy"></div><div class="card-meta"><h3>strawberry shortcake</h3><span class="pill on">drop 001</span></div><p>sweet, creamy, unapologetically dessert</p></li>
-      <li class="card"><div class="ph"><img src="images/nutella.jpg" alt="Nutella sourdough slice" loading="lazy"></div><div class="card-meta"><h3>nutella</h3><span class="pill on">drop 001</span></div><p>dark, indulgent, no explanation needed</p></li>
-      <li class="card"><div class="ph"><img src="images/matcha.jpg" alt="Matcha sourdough slice" loading="lazy"></div><div class="card-meta"><h3>matcha</h3><span class="pill off">coming back</span></div><p>earthy, smooth, quietly addictive</p></li>
-      <li class="card"><div class="ph"><img src="images/tiramisu.jpg" alt="Tiramisu sourdough slice" loading="lazy"></div><div class="card-meta"><h3>tiramisu</h3><span class="pill off">coming back</span></div><p>coffee-soaked and made for late nights</p></li>
-      <li class="card"><div class="ph"><img src="images/classic_sourdough.jpg" alt="Classic sourdough slice" loading="lazy"></div><div class="card-meta"><h3>classic sourdough</h3><span class="pill off">coming back</span></div><p>the one that started it all</p></li>
+      <li class="card"><div class="ph"><img src="images/cinnamon-card.webp" srcset="images/cinnamon-card-480.webp 480w, images/cinnamon-card.webp 800w" sizes="(max-width: 600px) 76vw, 21rem" alt="Cinnamon swirl sourdough slice" width="800" height="800" loading="lazy" decoding="async"></div><div class="card-meta"><h3>cinnamon swirl</h3><span class="pill on">drop 001</span></div><p>warm, familiar, and a little too good</p></li>
+      <li class="card"><div class="ph"><img src="images/creme_brule-card.webp" srcset="images/creme_brule-card-480.webp 480w, images/creme_brule-card.webp 800w" sizes="(max-width: 600px) 76vw, 21rem" alt="Crème brûlée sourdough slice" width="800" height="800" loading="lazy" decoding="async"></div><div class="card-meta"><h3>crème brûlée</h3><span class="pill on">drop 001</span></div><p>rich custard swirled into every bite</p></li>
+      <li class="card"><div class="ph"><img src="images/strawberry_shortcake-card.webp" srcset="images/strawberry_shortcake-card-480.webp 480w, images/strawberry_shortcake-card.webp 800w" sizes="(max-width: 600px) 76vw, 21rem" alt="Strawberry shortcake sourdough slice" width="800" height="800" loading="lazy" decoding="async"></div><div class="card-meta"><h3>strawberry shortcake</h3><span class="pill on">drop 001</span></div><p>sweet, creamy, unapologetically dessert</p></li>
+      <li class="card"><div class="ph"><img src="images/nutella-card.webp" srcset="images/nutella-card-480.webp 480w, images/nutella-card.webp 800w" sizes="(max-width: 600px) 76vw, 21rem" alt="Nutella sourdough slice" width="800" height="800" loading="lazy" decoding="async"></div><div class="card-meta"><h3>nutella</h3><span class="pill on">drop 001</span></div><p>dark, indulgent, no explanation needed</p></li>
+      <li class="card"><div class="ph"><img src="images/matcha-card.webp" srcset="images/matcha-card-480.webp 480w, images/matcha-card.webp 800w" sizes="(max-width: 600px) 76vw, 21rem" alt="Matcha sourdough slice" width="800" height="800" loading="lazy" decoding="async"></div><div class="card-meta"><h3>matcha</h3><span class="pill off">coming back</span></div><p>earthy, smooth, quietly addictive</p></li>
+      <li class="card"><div class="ph"><img src="images/tiramisu-card.webp" srcset="images/tiramisu-card-480.webp 480w, images/tiramisu-card.webp 800w" sizes="(max-width: 600px) 76vw, 21rem" alt="Tiramisu sourdough slice" width="800" height="800" loading="lazy" decoding="async"></div><div class="card-meta"><h3>tiramisu</h3><span class="pill off">coming back</span></div><p>coffee-soaked and made for late nights</p></li>
+      <li class="card"><div class="ph"><img src="images/classic_sourdough-card.webp" srcset="images/classic_sourdough-card-480.webp 480w, images/classic_sourdough-card.webp 800w" sizes="(max-width: 600px) 76vw, 21rem" alt="Classic sourdough slice" width="800" height="800" loading="lazy" decoding="async"></div><div class="card-meta"><h3>classic sourdough</h3><span class="pill off">coming back</span></div><p>the one that started it all</p></li>
     </ol>
   </section>
 
   <section class="section gift" id="gift">
     <div class="wrap gift-grid">
-      <figure data-reveal><img src="images/box_full.png" alt="An open Breakup Bread box; the lid reads: the hard part is over." loading="lazy"></figure>
+      <figure data-reveal><img src="images/box_full.webp" srcset="images/box_full-640.webp 640w, images/box_full.webp 1024w" sizes="(max-width: 960px) 92vw, 45vw" alt="An open Breakup Bread box; the lid reads: the hard part is over." width="1024" height="1024" loading="lazy" decoding="async"></figure>
       <div>
         <p class="label">made to be sent</p>
         <ul class="for-list">
@@ -383,7 +420,7 @@
         <p class="big" data-reveal style="--d:80ms">tag us when you cry into it.</p>
         <p data-reveal style="--d:140ms">Every loaf is built to be cut open on camera. A swirl like this doesn’t stay off the internet for long.</p>
       </div>
-      <figure data-reveal style="--d:100ms"><img src="images/half_box.png" alt="A half box of Breakup Bread pieces in pink and green" loading="lazy"></figure>
+      <figure data-reveal style="--d:100ms"><img src="images/half_box.webp" srcset="images/half_box-640.webp 640w, images/half_box.webp 1024w" sizes="(max-width: 600px) 100vw, 34vw" alt="A half box of Breakup Bread pieces in pink and green" width="1024" height="1024" loading="lazy" decoding="async"></figure>
     </div>
   </section>
 
@@ -433,8 +470,7 @@
 
   // Flavor stage
   const stage = document.querySelector('[data-stage]');
-  const tinted = document.querySelectorAll('[data-tinted]');
-  const tints = ['--tint-classic', '--tint-brulee', '--tint-strawberry', '--tint-matcha', '--tint-tiramisu'];
+  const tints = stage.querySelectorAll('.tints i');
   const names = stage.querySelectorAll('.name');
   const slices = stage.querySelectorAll('.slice');
   const lines = stage.querySelectorAll('.tagline');
@@ -447,9 +483,8 @@
 
   function show(i) {
     current = (i + names.length) % names.length;
-    [names, slices, lines].forEach((set) => set.forEach((el, n) => el.classList.toggle('is-on', n === current)));
+    [names, slices, lines, tints].forEach((set) => set.forEach((el, n) => el.classList.toggle('is-on', n === current)));
     chips.forEach((c, n) => c.setAttribute('aria-pressed', String(n === current)));
-    tinted.forEach((el) => el.style.setProperty('--tint', `var(${tints[current]})`));
     idx.textContent = String(current + 1).padStart(2, '0');
     schedule();
   }
@@ -474,9 +509,29 @@
   stage.addEventListener('pointerleave', () => { hovering = false; schedule(); });
   stage.addEventListener('focusin', () => { hovering = true; schedule(); });
   stage.addEventListener('focusout', (e) => { if (!stage.contains(e.relatedTarget)) { hovering = false; schedule(); } });
+
+  // Touch: swipe to change flavor, tap for the next one. Vertical scrolling cancels the gesture.
+  let downX = null;
+  stage.addEventListener('pointerdown', (e) => { if (e.pointerType !== 'mouse' && !e.target.closest('a, button')) downX = e.clientX; });
+  stage.addEventListener('pointercancel', () => { downX = null; });
+  stage.addEventListener('pointerup', (e) => {
+    if (downX === null) return;
+    const dx = e.clientX - downX;
+    downX = null;
+    show(current + (dx > 40 ? -1 : 1));
+  });
   show(0);
 
-  // Header drops the flavor tint once the stage scrolls away.
+  // Only the first slice loads up front; the rest follow once the page is up.
+  addEventListener('load', () => {
+    slices.forEach((img) => {
+      if (!img.dataset.src) return;
+      img.srcset = img.dataset.srcset;
+      img.src = img.dataset.src;
+    });
+  });
+
+  // Header turns cream once the stage scrolls away.
   const head = document.querySelector('.site-head');
   new IntersectionObserver(([e]) => head.classList.toggle('is-plain', !e.isIntersecting), { rootMargin: '-68px 0px 0px 0px' }).observe(stage);
 
