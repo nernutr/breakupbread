@@ -273,12 +273,15 @@
     .how ol { grid-template-columns: 1fr; }
   }
   @media (max-width: 600px) {
-    /* Hero: only the bread and its name. Swipe or tap to change flavor. */
-    .stage { --n: 15vw; --w: 94vw; padding-block: 4.25rem 0; touch-action: pan-y; }
-    .stage-in { min-height: calc(100svh - 4.25rem); grid-template-rows: 1fr; }
+    /* Hero: the bread and its name, the two CTAs, and the flavor names. Swipe or tap to change flavor. */
+    .stage { --n: 15vw; --w: 94vw; padding-block: 4.25rem 1rem; touch-action: pan-y; }
+    .stage-in { min-height: calc(100svh - 5.25rem); grid-template-rows: 1fr auto auto; }
     .stage-top { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
-    .stage-bottom, .picker { display: none; }
-    .stage-center { padding-block: 0 6svh; }
+    .taglines, .pause { display: none; }
+    .stage-center { padding-block: 0 1.5rem; }
+    .ctas { flex-wrap: nowrap; width: 100%; }
+    .ctas .btn { flex: 1; }
+    .picker { margin: 1.25rem calc(-1 * var(--gutter)) 0; padding: 1rem var(--gutter) 0; scroll-padding-inline: var(--gutter); }
 
     /* Flavors: photos and names only. */
     .sec-head .label, .sec-head p, .card p, .pill { display: none; }
@@ -486,7 +489,15 @@
     [names, slices, lines, tints].forEach((set) => set.forEach((el, n) => el.classList.toggle('is-on', n === current)));
     chips.forEach((c, n) => c.setAttribute('aria-pressed', String(n === current)));
     idx.textContent = String(current + 1).padStart(2, '0');
+    centerChip(chips[current]);
     schedule();
+  }
+  // On narrow screens the names row scrolls; keep the active one in view (horizontally only).
+  const picker = stage.querySelector('.picker');
+  function centerChip(chip) {
+    if (picker.scrollWidth <= picker.clientWidth) return;
+    const c = chip.getBoundingClientRect(), p = picker.getBoundingClientRect();
+    picker.scrollBy({ left: c.left + c.width / 2 - (p.left + p.width / 2), behavior: reduced ? 'auto' : 'smooth' });
   }
   function schedule() {
     clearTimeout(timer);
@@ -512,7 +523,7 @@
 
   // Touch: swipe to change flavor, tap for the next one. Vertical scrolling cancels the gesture.
   let downX = null;
-  stage.addEventListener('pointerdown', (e) => { if (e.pointerType !== 'mouse' && !e.target.closest('a, button')) downX = e.clientX; });
+  stage.addEventListener('pointerdown', (e) => { if (e.pointerType !== 'mouse' && !e.target.closest('a, button, .picker')) downX = e.clientX; });
   stage.addEventListener('pointercancel', () => { downX = null; });
   stage.addEventListener('pointerup', (e) => {
     if (downX === null) return;
