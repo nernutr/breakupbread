@@ -192,6 +192,53 @@
   .inside li { counter-increment: ing; display: flex; align-items: baseline; gap: 0.9rem; padding: 0.55rem 0; border-bottom: 1px solid var(--line); font-size: 0.95rem; }
   .inside li::before { content: counter(ing, decimal-leading-zero); font: 500 0.72rem/1 var(--sans); color: var(--ink-3); font-variant-numeric: tabular-nums; }
 
+  /* Perks: an outlined icon over a short line, used by the value strip and the drop club. */
+  .perk { display: flex; flex-direction: column; align-items: center; gap: 0.7rem; text-align: center; color: var(--ink); }
+  .perk .ic { display: grid; place-items: center; width: 3.4rem; height: 3.4rem; border: 1.5px solid currentColor; border-radius: 50%; }
+  .perk svg { width: 1.45rem; height: 1.45rem; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+  .perk .t { font-size: 0.92rem; line-height: 1.3; max-width: 14ch; }
+
+  /* Value strip */
+  .values { background: var(--cream-2); padding-block: clamp(1.75rem, 4vw, 2.75rem); }
+  .value-list { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1.5rem; }
+
+  /* Boxes: Bloom-style product cards that lead to the waitlist. */
+  .box-grid { list-style: none; width: min(100% - 2 * var(--gutter), var(--max)); margin: 0 auto; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(1rem, 2vw, 1.5rem); }
+  .box-card { display: flex; flex-direction: column; }
+  .box-ph { position: relative; aspect-ratio: 1; overflow: hidden; border-radius: 0.6rem; background: var(--brown); }
+  .box-ph img { width: 100%; height: 100%; object-fit: cover; }
+  .badge { position: absolute; top: 0.8rem; left: 0.8rem; z-index: 1; padding: 0.45rem 0.7rem; border-radius: 0.35rem; background: var(--cream); color: var(--ink); font: 700 0.68rem/1 var(--sans); letter-spacing: 0.12em; text-transform: uppercase; }
+  .badge.terra { background: var(--terra); color: var(--cream); }
+  .box-card h3 { font-size: var(--step-2); letter-spacing: -0.025em; margin-top: 1rem; }
+  .box-meta { margin-top: 0.35rem; font: 600 0.75rem/1.4 var(--sans); letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-2); }
+  .swatches { display: flex; gap: 0.35rem; margin: 1rem 0 1.25rem; }
+  .sw { flex: none; width: 1.9rem; height: 1.9rem; overflow: hidden; border-radius: 50%; box-shadow: 0 0 0 1px var(--line); }
+  .sw img { width: 100%; height: 100%; object-fit: cover; transform: scale(2.2); }
+  .box-card .btn { width: 100%; margin-top: auto; }
+  .btn-ink { background: var(--ink); color: var(--cream); }
+  .btn-ink:hover { background: oklch(33% 0.035 45); }
+  .boxes-note { margin-top: 1.75rem; font-size: 0.95rem; color: var(--ink-2); }
+  .boxes-note a { color: var(--terra); font-weight: 600; text-underline-offset: 0.2em; }
+
+  /* Drop club: Bloom's subscribe-and-save band. */
+  .club { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); background: oklch(93% 0.035 50); }
+  .club-copy { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: clamp(3.5rem, 8vw, 6.5rem) var(--gutter); }
+  .club h2 { font-size: var(--step-4); line-height: 0.95; letter-spacing: -0.035em; margin: 1rem 0 2.25rem; max-width: 12ch; }
+  .perks { list-style: none; margin: 0 0 2.25rem; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1.25rem; max-width: 38rem; }
+  .club-note { margin-top: 1rem; font-size: 0.85rem; color: var(--ink-2); }
+  .club-photo img { width: 100%; height: 100%; object-fit: cover; }
+
+  /* Founder */
+  .founder { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); background: var(--cream-2); }
+  .founder-photo { display: grid; place-items: center; min-height: clamp(22rem, 45vw, 40rem); background: var(--tint-classic); }
+  .founder-photo span { font: 600 0.72rem/1 var(--sans); letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-2); }
+  .founder-copy { display: flex; flex-direction: column; justify-content: center; padding: clamp(3rem, 7vw, 6rem) clamp(1.25rem, 6vw, 6rem); }
+  .founder h2 { font-size: var(--step-4); line-height: 0.95; letter-spacing: -0.035em; margin: 1rem 0 1.5rem; max-width: 13ch; }
+  .founder-copy p:not(.label) { max-width: 44ch; color: var(--ink-2); }
+  .founder-copy p + p { margin-top: 1rem; }
+  .founder-copy p.sig { margin-top: 1.5rem; font: 400 var(--step-1)/1.3 var(--serif); color: var(--ink); }
+  .founder .btn { align-self: flex-start; margin-top: 2rem; }
+
   /* Gift */
   .gift { background: var(--brown); color: var(--cream); }
   .gift-grid { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr); gap: clamp(2.5rem, 6vw, 6rem); align-items: center; }
@@ -271,6 +318,16 @@
     .gift-grid, .post-grid, .join-grid { grid-template-columns: 1fr; }
     .post figure { width: 80%; justify-self: end; }
     .how ol { grid-template-columns: 1fr; }
+    .box-grid {
+      width: auto; padding: 0 var(--gutter) 0.5rem; grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: min(80vw, 22rem);
+      overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: var(--gutter); scrollbar-width: none; overscroll-behavior-x: contain;
+    }
+    .box-grid::-webkit-scrollbar { display: none; }
+    .box-card { scroll-snap-align: start; }
+    .club, .founder { grid-template-columns: 1fr; }
+    .club-photo { order: -1; aspect-ratio: 4 / 3; }
+    .perks { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 1.75rem; }
+    .founder-photo { min-height: 0; aspect-ratio: 4 / 5; max-height: 34rem; }
   }
   @media (max-width: 600px) {
     /* Hero: the bread and its name, the two CTAs, and the flavor names. Swipe or tap to change flavor. */
@@ -285,6 +342,12 @@
 
     /* Flavors: photos and names only. */
     .sec-head .label, .sec-head p, .card p { display: none; }
+
+    /* Value strip, club and founder: shorter on phones. */
+    .value-list { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 1.5rem; }
+    .perk .ic { width: 2.9rem; height: 2.9rem; }
+    .perk .t { font-size: 0.86rem; }
+    .club-note, .founder-copy .more { display: none; }
 
     /* Post it: the photo fills the screen and the type sits on it. */
     .post { position: relative; display: flex; align-items: flex-end; min-height: 100svh; padding-block: 0 2.75rem; color: var(--cream); }
@@ -305,13 +368,27 @@
 </head>
 <body>
 
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-wheat" viewBox="0 0 24 24"><path d="M12 21V7"/><path d="M12 10c-2.6 0-4-1.7-4-4.2 2.6 0 4 1.7 4 4.2Zm0 0c2.6 0 4-1.7 4-4.2-2.6 0-4 1.7-4 4.2Z"/><path d="M12 15.5c-2.6 0-4-1.7-4-4.2 2.6 0 4 1.7 4 4.2Zm0 0c2.6 0 4-1.7 4-4.2-2.6 0-4 1.7-4 4.2Z"/></symbol>
+    <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="4" y="5.5" width="16" height="14.5" rx="2"/><path d="M4 10h16M8.5 3.5v4M15.5 3.5v4"/><circle cx="15.5" cy="15" r="1.3"/></symbol>
+    <symbol id="i-hourglass" viewBox="0 0 24 24"><path d="M7 3.5h10M7 20.5h10M8 3.5c0 5 8 5 8 8.5s-8 3.5-8 8.5M16 3.5c0 5-8 5-8 8.5s8 3.5 8 8.5"/></symbol>
+    <symbol id="i-gift" viewBox="0 0 24 24"><rect x="4" y="9" width="16" height="11" rx="1.5"/><path d="M3 9h18M12 9v11M12 9c-1.6-3-5.2-4-5.2-1.6S12 9 12 9Zm0 0c1.6-3 5.2-4 5.2-1.6S12 9 12 9Z"/></symbol>
+    <symbol id="i-percent" viewBox="0 0 24 24"><path d="M18 6 6 18"/><circle cx="7.5" cy="7.5" r="2.5"/><circle cx="16.5" cy="16.5" r="2.5"/></symbol>
+    <symbol id="i-star" viewBox="0 0 24 24"><path d="m12 3.5 2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.3-4.1 5.9-.9Z"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="10.5" width="14" height="10" rx="2"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/><circle cx="12" cy="15.5" r="1.3"/></symbol>
+    <symbol id="i-pause" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M10 9v6M14 9v6"/></symbol>
+  </defs>
+</svg>
+
 <header class="site-head">
   <div class="wrap head-in">
     <a class="mark" href="#top" aria-label="Breakup Bread, home">breakup<br>bread</a>
     <nav class="nav" aria-label="Primary">
+      <a href="#boxes">boxes</a>
       <a href="#drops">flavors</a>
+      <a href="#club">drop club</a>
       <a href="#gift">send one</a>
-      <a href="#how">how drops work</a>
       <a href="about.html">about</a>
     </nav>
     <a class="btn btn-terra" href="#waitlist">get the drop</a>
@@ -375,12 +452,55 @@
     </div>
   </section>
 
+  <section class="values" aria-label="Why Breakup Bread">
+    <ul class="wrap value-list">
+      <li class="perk"><span class="ic"><svg aria-hidden="true"><use href="#i-wheat"/></svg></span><span class="t">baked by Miami bakers</span></li>
+      <li class="perk"><span class="ic"><svg aria-hidden="true"><use href="#i-calendar"/></svg></span><span class="t">dropped every Friday</span></li>
+      <li class="perk"><span class="ic"><svg aria-hidden="true"><use href="#i-hourglass"/></svg></span><span class="t">small batches, gone when they’re gone</span></li>
+      <li class="perk"><span class="ic"><svg aria-hidden="true"><use href="#i-gift"/></svg></span><span class="t">gift-ready boxes</span></li>
+    </ul>
+  </section>
+
+  <section class="section" id="boxes">
+    <div class="wrap">
+      <header class="sec-head">
+        <p class="label">the boxes</p>
+        <h2 data-reveal>pick your box.</h2>
+        <p data-reveal style="--d:100ms">Slices of this week’s flavors, wrapped, sealed and boxed. Nothing to pay today: the list gets first access when preorders open.</p>
+      </header>
+    </div>
+    <ul class="box-grid">
+      <li class="box-card" data-reveal>
+        <div class="box-ph"><span class="badge">the starter</span><img src="images/half_box.webp" srcset="images/half_box-640.webp 640w, images/half_box.webp 1024w" sizes="(max-width: 960px) 80vw, 30vw" alt="An open half box of wax-sealed, paper-wrapped slices" width="1024" height="1024" loading="lazy" decoding="async"></div>
+        <h3>the half box</h3>
+        <p class="box-meta">4 slices · pick your flavors</p>
+        <div class="swatches" role="img" aria-label="Pick from all seven flavors"><span class="sw" title="cinnamon swirl"><img src="images/flavor-cinnamon-480.webp" alt="" loading="lazy" decoding="async"></span><span class="sw" title="crème brûlée"><img src="images/flavor-creme-brulee-480.webp" alt="" loading="lazy" decoding="async"></span><span class="sw" title="strawberry shortcake"><img src="images/flavor-strawberry-shortcake-480.webp" alt="" loading="lazy" decoding="async"></span><span class="sw" title="nutella"><img src="images/flavor-nutella-480.webp" alt="" loading="lazy" decoding="async"></span><span class="sw" title="matcha"><img src="images/flavor-matcha-480.webp" alt="" loading="lazy" decoding="async"></span><span class="sw" title="tiramisu"><img src="images/flavor-tiramisu-480.webp" alt="" loading="lazy" decoding="async"></span><span class="sw" title="classic sourdough"><img src="images/flavor-classic-480.webp" alt="" loading="lazy" decoding="async"></span></div>
+        <a class="btn btn-ink" href="#waitlist">get first access</a>
+      </li>
+      <li class="box-card" data-reveal style="--d:90ms">
+        <div class="box-ph"><span class="badge terra">build your own</span><img src="images/box_full.webp" srcset="images/box_full-480.webp 480w, images/box_full.webp 800w" sizes="(max-width: 960px) 80vw, 30vw" alt="An open full box of nine wrapped slices under a lid that reads: the hard part is over." width="800" height="800" loading="lazy" decoding="async"></div>
+        <h3>the full box</h3>
+        <p class="box-meta">9 slices · build your own</p>
+        <div class="swatches" role="img" aria-label="Pick from all seven flavors"><span class="sw" title="cinnamon swirl"><img src="images/flavor-cinnamon-480.webp" alt="" loading="lazy" decoding="async"></span><span class="sw" title="crème brûlée"><img src="images/flavor-creme-brulee-480.webp" alt="" loading="lazy" decoding="async"></span><span class="sw" title="strawberry shortcake"><img src="images/flavor-strawberry-shortcake-480.webp" alt="" loading="lazy" decoding="async"></span><span class="sw" title="nutella"><img src="images/flavor-nutella-480.webp" alt="" loading="lazy" decoding="async"></span><span class="sw" title="matcha"><img src="images/flavor-matcha-480.webp" alt="" loading="lazy" decoding="async"></span><span class="sw" title="tiramisu"><img src="images/flavor-tiramisu-480.webp" alt="" loading="lazy" decoding="async"></span><span class="sw" title="classic sourdough"><img src="images/flavor-classic-480.webp" alt="" loading="lazy" decoding="async"></span></div>
+        <a class="btn btn-ink" href="#waitlist">get first access</a>
+      </li>
+      <li class="box-card" data-reveal style="--d:180ms">
+        <div class="box-ph"><span class="badge">our signature</span><img src="images/core_collection.webp" srcset="images/core_collection-480.webp 480w, images/core_collection.webp 800w" sizes="(max-width: 960px) 80vw, 30vw" alt="Slices of every flavor stacked in a pyramid" width="800" height="800" loading="lazy" decoding="async"></div>
+        <h3>the core collection</h3>
+        <p class="box-meta">9 slices · our signature mix</p>
+        <div class="swatches" role="img" aria-label="A mix of our signature flavors"><span class="sw" title="cinnamon swirl"><img src="images/flavor-cinnamon-480.webp" alt="" loading="lazy" decoding="async"></span><span class="sw" title="crème brûlée"><img src="images/flavor-creme-brulee-480.webp" alt="" loading="lazy" decoding="async"></span><span class="sw" title="strawberry shortcake"><img src="images/flavor-strawberry-shortcake-480.webp" alt="" loading="lazy" decoding="async"></span><span class="sw" title="nutella"><img src="images/flavor-nutella-480.webp" alt="" loading="lazy" decoding="async"></span><span class="sw" title="matcha"><img src="images/flavor-matcha-480.webp" alt="" loading="lazy" decoding="async"></span><span class="sw" title="tiramisu"><img src="images/flavor-tiramisu-480.webp" alt="" loading="lazy" decoding="async"></span><span class="sw" title="classic sourdough"><img src="images/flavor-classic-480.webp" alt="" loading="lazy" decoding="async"></span></div>
+        <a class="btn btn-ink" href="#waitlist">get first access</a>
+      </li>
+    </ul>
+    <p class="wrap boxes-note">Drop club members save 10% on every box. <a href="#club">See the club</a></p>
+  </section>
+
   <section class="section" id="drops">
     <div class="wrap">
       <header class="sec-head">
         <p class="label">the full rotation</p>
         <h2 data-reveal>seven new flavors weekly.</h2>
-        <p data-reveal style="--d:100ms">What goes into each loaf.</p>
+        <p data-reveal style="--d:100ms">What goes into each slice.</p>
         <div class="arrows">
           <button class="arrow" type="button" data-scroll="-1" aria-label="Previous flavors">←</button>
           <button class="arrow" type="button" data-scroll="1" aria-label="More flavors">→</button>
@@ -434,6 +554,22 @@
     </ol>
   </section>
 
+  <section class="club" id="club">
+    <div class="club-copy">
+      <p class="label">the drop club</p>
+      <h2 data-reveal>save 10% on every drop.</h2>
+      <ul class="perks">
+        <li class="perk"><span class="ic"><svg aria-hidden="true"><use href="#i-percent"/></svg></span><span class="t">10% off every box</span></li>
+        <li class="perk"><span class="ic"><svg aria-hidden="true"><use href="#i-star"/></svg></span><span class="t">first pick of flavors</span></li>
+        <li class="perk"><span class="ic"><svg aria-hidden="true"><use href="#i-lock"/></svg></span><span class="t">a members-only flavor</span></li>
+        <li class="perk"><span class="ic"><svg aria-hidden="true"><use href="#i-pause"/></svg></span><span class="t">skip or cancel anytime</span></li>
+      </ul>
+      <a class="btn btn-ink" href="#waitlist">join the drop club</a>
+      <p class="club-note">Club spots open to the list first.</p>
+    </div>
+    <figure class="club-photo"><img src="images/box_full.webp" srcset="images/box_full-480.webp 480w, images/box_full.webp 800w" sizes="(max-width: 960px) 100vw, 50vw" alt="An open Breakup Bread box of wrapped slices; the lid reads: the hard part is over." width="800" height="800" loading="lazy" decoding="async"></figure>
+  </section>
+
   <section class="section gift" id="gift">
     <div class="wrap gift-grid">
       <figure data-reveal><img src="images/gift_box.webp" srcset="images/gift_box-640.webp 640w, images/gift_box.webp 1024w" sizes="(max-width: 960px) 92vw, 55vw" alt="Hands lifting wax-sealed, paper-wrapped slices of Breakup Bread out of an open kraft box whose lid reads: the hard part is over." width="1024" height="572" loading="lazy" decoding="async"></figure>
@@ -445,9 +581,22 @@
           <li data-reveal style="--d:180ms">for your sister, the week after the move.</li>
           <li data-reveal style="--d:270ms">for you. obviously.</li>
         </ul>
-        <p data-reveal style="--d:320ms">Every loaf ships in a box that says what you can’t: the hard part is over. Send one anywhere in Miami.</p>
+        <p data-reveal style="--d:320ms">Every box says what you can’t: the hard part is over. Send one anywhere in Miami.</p>
         <a class="btn" href="#waitlist">join the list to send one</a>
       </div>
+    </div>
+  </section>
+
+  <section class="founder" id="story">
+    <!-- Placeholder until the founder photo arrives. -->
+    <figure class="founder-photo"><span>founder photo</span></figure>
+    <div class="founder-copy">
+      <p class="label">why breakup bread</p>
+      <h2 data-reveal>made for the hard days.</h2>
+      <p>I started Breakup Bread with a simple idea: that food can hold you when nothing else does.</p>
+      <p class="more">So we make handmade dessert sourdough, baked by Miami bakers and dropped every week, for the moments when you need something real. To eat warm, to send to a friend, or to keep entirely to yourself.</p>
+      <p class="sig">— the founder</p>
+      <a class="btn" href="about.html">our story</a>
     </div>
   </section>
 
@@ -457,7 +606,7 @@
         <p class="label">post it</p>
         <h2 data-reveal>#breakupbread</h2>
         <p class="big" data-reveal style="--d:80ms">tag us when you cry into it.</p>
-        <p data-reveal style="--d:140ms">Every loaf is built to be cut open on camera. A swirl like this doesn’t stay off the internet for long.</p>
+        <p data-reveal style="--d:140ms">Every slice is built to be unwrapped on camera. A swirl like this doesn’t stay off the internet for long.</p>
       </div>
       <figure data-reveal style="--d:100ms"><img src="images/half_box.webp" srcset="images/half_box-640.webp 640w, images/half_box.webp 1024w" sizes="(max-width: 600px) 100vw, 34vw" alt="A half box of Breakup Bread pieces in pink and green" width="1024" height="1024" loading="lazy" decoding="async"></figure>
     </div>
@@ -468,8 +617,8 @@
       <p class="label" style="margin-bottom:2rem">how drops work</p>
       <ol>
         <li data-reveal><span class="n">1</span><div><h3>join the list.</h3><p>The menu goes to the list before it goes anywhere else.</p></div></li>
-        <li data-reveal style="--d:90ms"><span class="n">2</span><div><h3>claim your loaf.</h3><p>Preorders close Thursday at midnight, or when the batch sells out.</p></div></li>
-        <li data-reveal style="--d:180ms"><span class="n">3</span><div><h3>friday, it’s yours.</h3><p>Whole loaves, boxed, delivered across Miami.</p></div></li>
+        <li data-reveal style="--d:90ms"><span class="n">2</span><div><h3>claim your box.</h3><p>Preorders close Thursday at midnight, or when the batch sells out.</p></div></li>
+        <li data-reveal style="--d:180ms"><span class="n">3</span><div><h3>friday, it’s yours.</h3><p>Wrapped, sealed and boxed, delivered across Miami.</p></div></li>
       </ol>
     </div>
   </section>
